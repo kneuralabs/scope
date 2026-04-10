@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KNEURASCOPE — AI Governance Assessment</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root {
+  --kn-primary:#7E9B8A;--kn-navy:#1C1B19;--kn-teal:#8DA3B0;--kn-slate:#5C5A55;
+  --kn-cream:#F2F1EE;--kn-white:#FFFFFF;--kn-logo-teal:#468DA3;--kn-logo-crimson:#C5062A;
+  --kn-electric:#0A98D9;--kn-emerald:#0A7A50;--kn-alert:#C0392B;--kn-amber:#D4860A;
+  --kn-font:'Inter','-apple-system','SF Pro Text',sans-serif;--kn-mono:'Courier New',monospace;
+  --kn-base:16px;--kn-leading:1.6;--kn-logo-nav:36px;
+  --kn-4:4px;--kn-8:8px;--kn-16:16px;--kn-32:32px;--kn-48:48px;--kn-64:64px;--kn-96:96px;
+  --kn-shadow-sm:0 1px 4px rgba(28,27,25,0.06);--kn-shadow-md:0 4px 16px rgba(28,27,25,0.10);
+}
+*,::after,::before{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--kn-font);background:var(--kn-white);color:var(--kn-navy);min-height:100vh;-webkit-font-smoothing:antialiased;font-size:var(--kn-base);line-height:var(--kn-leading);}
+header{background:var(--kn-white);border-bottom:2px solid var(--kn-primary);position:sticky;top:0;z-index:100;padding:0 var(--kn-48);display:flex;align-items:center;justify-content:space-between;height:64px;}
+.header-logo{display:flex;align-items:center;gap:var(--kn-16);}
+.kn-artmark{width:var(--kn-logo-nav);height:var(--kn-logo-nav);flex-shrink:0;}
+.header-brand{display:flex;flex-direction:column;gap:1px;}
+.wordmark{font-family:var(--kn-font);font-size:16px;font-weight:700;letter-spacing:0.08em;color:var(--kn-navy);line-height:1;text-transform:uppercase;}
+.product-name{font-family:var(--kn-mono);font-size:9px;font-weight:400;letter-spacing:0.18em;text-transform:uppercase;color:var(--kn-primary);line-height:1;}
+.header-tagline{font-size:11px;color:var(--kn-slate);font-weight:400;letter-spacing:0.04em;}
+.hero{background:var(--kn-navy);position:relative;overflow:hidden;padding:var(--kn-64) var(--kn-48) 56px;display:flex;flex-direction:column;align-items:flex-start;gap:var(--kn-16);}
+.hero::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--kn-primary);}
+.hero::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(126,155,138,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(126,155,138,0.04) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;}
+.hero-kicker{font-family:var(--kn-mono);font-size:10px;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:var(--kn-primary);position:relative;z-index:1;}
+.hero h1{font-family:var(--kn-font);font-size:clamp(28px,4vw,2.25rem);font-weight:800;color:var(--kn-white);letter-spacing:-0.02em;line-height:1.2;max-width:640px;position:relative;z-index:1;}
+.hero h1 span{color:var(--kn-primary);}
+.hero p{font-size:1rem;color:var(--kn-teal);max-width:600px;line-height:1.6;font-weight:400;position:relative;z-index:1;}
+.hero-meta{display:flex;gap:var(--kn-32);margin-top:var(--kn-8);position:relative;z-index:1;}
+.hero-meta-item{display:flex;flex-direction:column;gap:2px;}
+.hero-meta-item .label{font-family:var(--kn-mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--kn-slate);}
+.hero-meta-item .value{font-size:13px;font-weight:700;color:var(--kn-white);letter-spacing:-0.01em;}
+.gov-banner{background:rgba(126,155,138,0.08);border:1px solid rgba(126,155,138,0.25);border-left:3px solid var(--kn-primary);padding:12px 20px;margin-bottom:var(--kn-32);display:flex;align-items:flex-start;gap:12px;}
+.gov-banner svg{width:16px;height:16px;stroke:var(--kn-primary);fill:none;stroke-width:2;flex-shrink:0;margin-top:2px;}
+.gov-banner p{font-size:12px;color:var(--kn-slate);line-height:1.55;}
+.gov-banner strong{color:var(--kn-navy);font-weight:600;}
+.layout{max-width:1100px;margin:0 auto;padding:var(--kn-48) var(--kn-48) var(--kn-96);display:grid;grid-template-columns:1fr 320px;gap:var(--kn-48);align-items:start;}
+.org-section{background:var(--kn-white);border:1px solid var(--kn-cream);border-top:3px solid var(--kn-primary);padding:var(--kn-32);margin-bottom:var(--kn-32);}
+.org-section h3{font-family:var(--kn-mono);font-size:9px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--kn-slate);margin-bottom:var(--kn-16);}
+.org-fields{display:grid;grid-template-columns:1fr 1fr;gap:var(--kn-16);}
+.field-group{display:flex;flex-direction:column;gap:6px;}
+.field-group label{font-family:var(--kn-font);font-size:11px;font-weight:700;color:var(--kn-navy);text-transform:uppercase;letter-spacing:0.06em;}
+.field-group input,.field-group select{font-family:var(--kn-font);font-size:13px;padding:10px 14px;border:1px solid var(--kn-cream);border-radius:0;background:var(--kn-cream);outline:0;color:var(--kn-navy);transition:border-color 0.15s,background 0.15s;}
+.field-group input:focus,.field-group select:focus{border-color:var(--kn-primary);background:var(--kn-white);}
+.dimension{background:var(--kn-white);border:1px solid var(--kn-cream);margin-bottom:var(--kn-16);overflow:hidden;transition:box-shadow 0.2s;}
+.dimension:hover{box-shadow:var(--kn-shadow-sm);}
+.dimension-header{display:flex;align-items:center;gap:14px;padding:18px 24px;border-bottom:1px solid var(--kn-cream);cursor:pointer;transition:background 0.15s;}
+.dimension-header:hover{background:var(--kn-cream);}
+.dim-icon{width:36px;height:36px;background:var(--kn-cream);border:1px solid rgba(126,155,138,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.dim-icon svg{width:16px;height:16px;stroke:var(--kn-primary);fill:none;stroke-width:1.5;}
+.dim-title-block{flex:1;}
+.dim-title{font-family:var(--kn-font);font-size:13px;font-weight:700;color:var(--kn-navy);}
+.dim-subtitle{font-size:11px;color:var(--kn-slate);margin-top:2px;font-weight:400;}
+.dim-gov-tag{font-family:var(--kn-mono);font-size:9px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--kn-primary);border:1px solid rgba(126,155,138,0.3);padding:3px 8px;background:rgba(126,155,138,0.06);flex-shrink:0;}
+.dim-score-badge{font-family:var(--kn-mono);font-size:10px;font-weight:600;color:var(--kn-slate);background:var(--kn-cream);border:1px solid rgba(92,90,85,0.2);padding:4px 10px;letter-spacing:0.06em;}
+.dim-chevron{width:16px;height:16px;color:var(--kn-slate);transition:transform 0.2s;}
+.dimension.open .dim-chevron{transform:rotate(180deg);}
+.dimension-body{display:none;padding:var(--kn-8) 0;}
+.dimension.open .dimension-body{display:block;}
+.question-row{padding:var(--kn-16) 24px;border-bottom:1px solid var(--kn-cream);}
+.question-row:last-child{border-bottom:0;}
+.q-header{display:flex;gap:12px;margin-bottom:14px;align-items:flex-start;}
+.q-num{font-family:var(--kn-mono);font-size:10px;font-weight:700;color:var(--kn-teal);letter-spacing:0.08em;flex-shrink:0;padding-top:2px;min-width:24px;}
+.q-text{font-size:13px;font-weight:500;color:var(--kn-navy);line-height:1.55;flex:1;}
+.q-signal{font-family:var(--kn-mono);font-size:9px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--kn-slate);background:var(--kn-cream);padding:2px 7px;flex-shrink:0;border:1px solid rgba(92,90,85,0.15);align-self:flex-start;white-space:nowrap;}
+.options-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--kn-8);padding-left:36px;}
+.option-btn{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border:1px solid var(--kn-cream);background:var(--kn-cream);cursor:pointer;text-align:left;transition:border-color 0.15s,background 0.15s;border-radius:0;}
+.option-btn:hover{border-color:var(--kn-primary);background:rgba(126,155,138,0.08);}
+.option-btn.selected{border-color:var(--kn-primary);background:rgba(126,155,138,0.12);border-left:3px solid var(--kn-primary);}
+.option-key{font-family:var(--kn-mono);font-size:10px;font-weight:700;color:var(--kn-primary);flex-shrink:0;min-width:14px;}
+.option-text{font-size:12px;color:var(--kn-navy);font-weight:400;line-height:1.5;}
+.add-note-trigger{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;color:var(--kn-slate);cursor:pointer;background:0;border:0;padding:6px 0 2px;font-family:var(--kn-font);letter-spacing:0.02em;}
+.add-note-trigger svg{width:12px;height:12px;stroke:var(--kn-slate);fill:none;stroke-width:2;}
+.remarks-row{padding:0 24px 16px 60px;display:none;}
+.remarks-row.visible{display:block;}
+.remarks-input{width:100%;font-family:var(--kn-font);font-size:12px;background:var(--kn-cream);border:1px solid rgba(92,90,85,0.2);border-left:3px solid var(--kn-teal);padding:8px 12px;resize:none;min-height:52px;color:var(--kn-navy);outline:0;}
+.submit-row{display:flex;justify-content:flex-end;gap:12px;margin-top:var(--kn-8);padding:var(--kn-16) 0 0;}
+.btn-reset{font-family:var(--kn-font);font-size:11px;font-weight:600;color:var(--kn-slate);background:var(--kn-white);border:1px solid var(--kn-cream);padding:10px 22px;cursor:pointer;letter-spacing:0.08em;text-transform:uppercase;}
+.btn-reset:hover{border-color:var(--kn-slate);}
+.btn-submit{font-family:var(--kn-font);font-size:11px;font-weight:700;color:var(--kn-white);background:var(--kn-primary);border:0;padding:10px 28px;cursor:pointer;text-transform:uppercase;letter-spacing:0.1em;transition:background 0.15s;}
+.btn-submit:hover{background:#6b8577;}
+.btn-submit:disabled{background:var(--kn-cream);color:var(--kn-slate);cursor:not-allowed;}
+.sidebar{position:sticky;top:88px;}
+.progress-card{background:var(--kn-white);border:1px solid var(--kn-cream);margin-bottom:var(--kn-16);overflow:hidden;}
+.progress-header{background:var(--kn-navy);padding:var(--kn-16);border-bottom:2px solid var(--kn-primary);}
+.progress-header .label{font-family:var(--kn-mono);font-size:9px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:var(--kn-slate);}
+.progress-header .count{font-family:var(--kn-font);font-size:28px;font-weight:800;color:var(--kn-white);margin-top:4px;letter-spacing:-0.03em;}
+.progress-header .count span{font-size:13px;font-weight:400;color:var(--kn-slate);}
+.progress-bar-wrap{padding:var(--kn-16) var(--kn-16) 12px;border-bottom:1px solid var(--kn-cream);}
+.progress-bar-track{height:2px;background:var(--kn-cream);}
+.progress-bar-fill{height:100%;background:var(--kn-primary);width:0;transition:width 0.3s ease;}
+.progress-bar-label{display:flex;justify-content:space-between;margin-top:6px;font-family:var(--kn-mono);font-size:10px;color:var(--kn-slate);letter-spacing:0.04em;}
+.dim-progress-list{padding:var(--kn-8) 0;}
+.dim-progress-item{display:flex;align-items:center;gap:10px;padding:8px var(--kn-16);}
+.dim-dot{width:6px;height:6px;background:var(--kn-cream);border:1px solid var(--kn-slate);}
+.dim-dot.complete{background:var(--kn-primary);border-color:var(--kn-primary);}
+.dim-dot.partial{background:var(--kn-teal);border-color:var(--kn-teal);}
+.dim-progress-label{font-size:11px;color:var(--kn-navy);flex:1;font-weight:500;}
+.dim-progress-count{font-family:var(--kn-mono);font-size:10px;color:var(--kn-slate);letter-spacing:0.04em;}
+.result-card{background:var(--kn-white);border:1px solid var(--kn-cream);display:none;overflow:hidden;}
+.result-card.visible{display:block;}
+.result-header{padding:var(--kn-16);border-bottom:1px solid var(--kn-cream);background:var(--kn-cream);}
+.result-header .label{font-family:var(--kn-mono);font-size:9px;font-weight:600;letter-spacing:0.18em;color:var(--kn-slate);text-transform:uppercase;margin-bottom:12px;}
+.maturity-badge{display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;font-family:var(--kn-font);font-size:13px;font-weight:700;}
+.maturity-badge.unprepared{background:rgba(192,57,43,0.08);color:var(--kn-alert);border:1px solid rgba(192,57,43,0.2);}
+.maturity-badge.early{background:rgba(212,134,10,0.08);color:var(--kn-amber);border:1px solid rgba(212,134,10,0.2);}
+.maturity-badge.ready{background:rgba(141,163,176,0.12);color:var(--kn-teal);border:1px solid rgba(141,163,176,0.3);}
+.maturity-badge.mature{background:rgba(10,122,80,0.08);color:var(--kn-emerald);border:1px solid rgba(10,122,80,0.2);}
+.maturity-runway{padding:var(--kn-16);border-bottom:1px solid var(--kn-cream);}
+.runway-track{height:4px;background:var(--kn-cream);position:relative;margin:var(--kn-16) 0 var(--kn-8);border:1px solid rgba(92,90,85,0.15);}
+.runway-fill{height:100%;transition:width 1.2s ease;background:linear-gradient(90deg,var(--kn-alert),var(--kn-amber),var(--kn-teal),var(--kn-emerald));}
+.runway-marker{position:absolute;top:-5px;width:12px;height:12px;background:var(--kn-white);border:2px solid var(--kn-primary);box-shadow:0 0 0 3px rgba(126,155,138,0.2);transform:translateX(-50%);transition:left 1.2s ease;}
+.runway-labels{display:flex;justify-content:space-between;margin-top:var(--kn-8);}
+.runway-label{font-family:var(--kn-mono);font-size:9px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--kn-slate);}
+.runway-label.active{color:var(--kn-primary);}
+.scores-grid{padding:var(--kn-16);display:flex;flex-direction:column;gap:10px;border-bottom:1px solid var(--kn-cream);}
+.score-item{display:flex;justify-content:space-between;align-items:center;}
+.score-item .slabel{font-size:11px;color:var(--kn-slate);font-weight:400;}
+.score-item .svalue{font-family:var(--kn-mono);font-size:13px;font-weight:700;color:var(--kn-navy);letter-spacing:0.04em;}
+.score-item .svalue.alert{color:var(--kn-alert);}
+.recommendation{padding:var(--kn-16);}
+.recommendation .rec-label{font-family:var(--kn-mono);font-size:9px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:var(--kn-slate);margin-bottom:var(--kn-8);}
+.recommendation p{font-size:12px;color:var(--kn-navy);line-height:1.6;font-weight:400;}
+#results-page{display:none;}
+#results-page.visible{display:block;}
+#assessment-page.hidden{display:none;}
+.results-hero{background:var(--kn-navy);padding:var(--kn-48);position:relative;}
+.results-hero::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--kn-primary);}
+.results-hero::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(126,155,138,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(126,155,138,0.04) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;}
+.results-hero .rh-label{font-family:var(--kn-mono);font-size:10px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:var(--kn-primary);margin-bottom:12px;position:relative;z-index:1;}
+.results-hero h2{font-family:var(--kn-font);font-size:clamp(24px,3vw,2.25rem);font-weight:800;color:var(--kn-white);letter-spacing:-0.02em;margin-bottom:var(--kn-8);position:relative;z-index:1;}
+.results-hero .org-name-display{font-size:14px;color:var(--kn-teal);font-weight:400;position:relative;z-index:1;}
+.results-layout{max-width:1100px;margin:0 auto;padding:var(--kn-48) var(--kn-48) var(--kn-96);display:grid;grid-template-columns:280px 1fr;gap:var(--kn-48);align-items:start;}
+.maturity-panel{background:var(--kn-white);border:1px solid var(--kn-cream);overflow:hidden;position:sticky;top:88px;}
+.maturity-panel-header{background:var(--kn-cream);padding:var(--kn-16);border-bottom:1px solid rgba(92,90,85,0.15);}
+.maturity-panel-header .mp-label{font-family:var(--kn-mono);font-size:9px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:var(--kn-slate);margin-bottom:var(--kn-8);}
+.big-score{font-family:var(--kn-font);font-size:52px;font-weight:800;color:var(--kn-navy);letter-spacing:-0.04em;line-height:1;}
+.big-score span{font-size:18px;font-weight:400;color:var(--kn-slate);}
+.maturity-scale{padding:var(--kn-16);border-bottom:1px solid var(--kn-cream);}
+.scale-item{display:flex;align-items:center;gap:10px;padding:7px 0;opacity:0.4;transition:opacity 0.2s;}
+.scale-item.current{opacity:1;}
+.scale-dot{width:8px;height:8px;}
+.scale-dot.unprepared{background:var(--kn-alert);}
+.scale-dot.early{background:var(--kn-amber);}
+.scale-dot.ready{background:var(--kn-teal);}
+.scale-dot.mature{background:var(--kn-emerald);}
+.scale-text{flex:1;}
+.scale-name{font-size:12px;font-weight:600;color:var(--kn-navy);}
+.scale-range{font-family:var(--kn-mono);font-size:10px;color:var(--kn-slate);letter-spacing:0.04em;}
+.maturity-rec{padding:var(--kn-16);}
+.maturity-rec .rec-label{font-family:var(--kn-mono);font-size:9px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:var(--kn-slate);margin-bottom:var(--kn-8);}
+.maturity-rec p{font-size:12px;color:var(--kn-navy);line-height:1.6;}
+.gaps-summary{background:var(--kn-white);border:1px solid var(--kn-cream);border-top:3px solid var(--kn-alert);padding:var(--kn-16);margin-top:var(--kn-16);}
+.gaps-summary .gs-label{font-family:var(--kn-mono);font-size:9px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:var(--kn-alert);margin-bottom:var(--kn-8);}
+.gap-item{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--kn-cream);font-size:11px;color:var(--kn-navy);line-height:1.5;}
+.gap-item:last-child{border-bottom:0;}
+.gap-badge{font-family:var(--kn-mono);font-size:8px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:2px 6px;flex-shrink:0;margin-top:1px;}
+.gap-badge.critical{background:rgba(192,57,43,0.12);color:var(--kn-alert);border:1px solid rgba(192,57,43,0.25);}
+.gap-badge.significant{background:rgba(212,134,10,0.1);color:var(--kn-amber);border:1px solid rgba(212,134,10,0.25);}
+.dim-result-card{background:var(--kn-white);border:1px solid var(--kn-cream);margin-bottom:var(--kn-16);overflow:hidden;}
+.dim-result-header{display:flex;align-items:center;gap:14px;padding:var(--kn-16);border-bottom:1px solid var(--kn-cream);background:var(--kn-cream);}
+.dim-result-title{flex:1;font-size:13px;font-weight:700;color:var(--kn-navy);}
+.dim-result-score{font-family:var(--kn-mono);font-size:20px;font-weight:800;color:var(--kn-navy);letter-spacing:-0.02em;}
+.dim-result-score span{font-size:11px;font-weight:400;color:var(--kn-slate);}
+.dim-result-score.low{color:var(--kn-alert);}
+.dim-result-score.mid{color:var(--kn-amber);}
+.dim-result-score.high{color:var(--kn-emerald);}
+.score-bar-track{height:2px;background:rgba(92,90,85,0.15);}
+.score-bar-fill{height:100%;background:var(--kn-primary);transition:width 0.6s ease;}
+.dim-result-body{padding:var(--kn-8) 0;}
+.dim-q-result{display:flex;align-items:flex-start;gap:12px;padding:10px var(--kn-16);border-bottom:1px solid var(--kn-cream);}
+.dim-q-result:last-child{border-bottom:0;}
+.dqr-num{font-family:var(--kn-mono);font-size:10px;color:var(--kn-teal);flex-shrink:0;padding-top:1px;}
+.dqr-text{font-size:12px;color:var(--kn-slate);line-height:1.5;}
+.dqr-remark{font-size:11px;color:var(--kn-primary);margin-top:4px;font-style:italic;}
+.dqr-answer{font-family:var(--kn-mono);font-size:11px;font-weight:700;color:var(--kn-navy);flex-shrink:0;white-space:nowrap;}
+.dqr-gap{font-family:var(--kn-mono);font-size:9px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;margin-top:4px;padding:2px 6px;display:inline-block;}
+.dqr-gap.critical{background:rgba(192,57,43,0.1);color:var(--kn-alert);border:1px solid rgba(192,57,43,0.2);}
+.dqr-gap.significant{background:rgba(212,134,10,0.08);color:var(--kn-amber);border:1px solid rgba(212,134,10,0.2);}
+.chart-section{background:var(--kn-white);border:1px solid var(--kn-cream);padding:var(--kn-32);margin-bottom:var(--kn-32);}
+.chart-title{font-family:var(--kn-mono);font-size:10px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:var(--kn-slate);margin-bottom:var(--kn-16);}
+.back-btn{display:inline-flex;align-items:center;gap:6px;font-family:var(--kn-font);font-size:11px;font-weight:600;color:var(--kn-slate);background:var(--kn-white);border:1px solid var(--kn-cream);padding:8px 16px;cursor:pointer;letter-spacing:0.06em;text-transform:uppercase;}
+.back-btn:hover{border-color:var(--kn-slate);}
+.btn-print{display:inline-flex;align-items:center;gap:6px;font-family:var(--kn-font);font-size:11px;font-weight:700;color:var(--kn-white);background:var(--kn-navy);border:0;padding:8px 16px;cursor:pointer;letter-spacing:0.06em;text-transform:uppercase;}
+#reveal-overlay{position:fixed;inset:0;background:var(--kn-navy);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+#reveal-overlay.active{opacity:1;pointer-events:all;}
+#reveal-maturity-tier{font-family:var(--kn-mono);font-size:11px;font-weight:600;letter-spacing:0.3em;text-transform:uppercase;color:var(--kn-primary);}
+#reveal-score-display{font-family:var(--kn-font);font-size:72px;font-weight:800;color:var(--kn-white);letter-spacing:-0.04em;line-height:1;}
+#reveal-score-display span{font-size:20px;font-weight:400;color:var(--kn-slate);}
+#reveal-pine-bar{width:64px;height:2px;background:var(--kn-primary);}
+#reveal-label{font-family:var(--kn-mono);font-size:9px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:var(--kn-slate);}
+#reveal-scan-line{font-family:var(--kn-mono);font-size:10px;color:var(--kn-teal);letter-spacing:0.12em;text-transform:uppercase;opacity:0;transition:opacity 0.2s;min-height:16px;}
+#reveal-scan-line.visible{opacity:1;}
+footer{background:var(--kn-navy);border-top:2px solid var(--kn-primary);padding:var(--kn-32) var(--kn-48);display:flex;align-items:center;justify-content:space-between;}
+.ft-brand{font-family:var(--kn-mono);font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--kn-primary);}
+.ft-copy{font-size:11px;color:var(--kn-slate);}
+.ft-link{font-family:var(--kn-mono);font-size:10px;color:var(--kn-teal);text-decoration:underline;letter-spacing:0.04em;}
+@media print{.no-print{display:none;}#assessment-page{display:none;}#results-page{display:block;}.results-hero{background:var(--kn-navy)!important;border-left:4px solid var(--kn-primary)!important;}.results-hero h2,.results-hero .org-name-display{color:var(--kn-white)!important;}.runway-fill{print-color-adjust:exact;}body{background:var(--kn-white);}}
+@media(max-width:768px){header{padding:0 var(--kn-16);}.hero{padding:var(--kn-48) var(--kn-16);}.layout{grid-template-columns:1fr;padding:var(--kn-32) var(--kn-16) var(--kn-64);}.results-layout{grid-template-columns:1fr;padding:var(--kn-32) var(--kn-16) var(--kn-64);}.org-fields{grid-template-columns:1fr;}.options-grid{grid-template-columns:1fr;}footer{flex-direction:column;gap:var(--kn-8);text-align:center;padding:var(--kn-32) var(--kn-16);}.q-signal{display:none;}.dim-gov-tag{display:none;}}
+</style>
+</head>
+<body>
+
+<div id="reveal-overlay">
+  <div id="reveal-scan-line">Analysing governance dimensions…</div>
+  <div id="reveal-maturity-tier">—</div>
+  <div id="reveal-score-display">—<span> / 4.0</span></div>
+  <div id="reveal-pine-bar"></div>
+  <div id="reveal-label">AI Governance Score</div>
+</div>
+
+<header>
+  <div class="header-logo">
+    <svg class="kn-artmark" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="KNEURALABS logo">
+      <circle cx="18" cy="18" r="16" fill="#1C1B19"/>
+      <path d="M18 2 A16 16 0 0 0 18 34 Z" fill="#468DA3"/>
+      <path d="M18 2 A16 16 0 0 1 31.86 26 L18 18 Z" fill="#C5062A"/>
+      <path d="M31.86 26 A16 16 0 0 1 18 34 L18 18 Z" fill="#0A98D9"/>
+    </svg>
+    <div class="header-brand">
+      <span class="wordmark">KNEURALABS</span>
+      <span class="product-name">Kneurascope</span>
+    </div>
+  </div>
+  <span class="header-tagline">Structural AI Governance.</span>
+</header>
+
+<div id="assessment-page">
+  <div class="hero">
+    <span class="hero-kicker">AI Governance Assessment</span>
+    <h1>What's standing between you<br>and <span>AI Governance maturity?</span></h1>
+    <p>This diagnostic pinpoints exactly where your organisation falls short of governance-complete AI operations — across strategy, process, data, accountability, risk, and culture. Every question targets a specific, named governance gap.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item"><span class="label">Questions</span><span class="value">20</span></div>
+      <div class="hero-meta-item"><span class="label">Dimensions</span><span class="value">6</span></div>
+      <div class="hero-meta-item"><span class="label">Est. Time</span><span class="value">12–18 min</span></div>
+      <div class="hero-meta-item"><span class="label">Output</span><span class="value">Gap Report</span></div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <div class="assessment-form">
+      <div class="org-section">
+        <h3>Organisation Details</h3>
+        <div class="org-fields">
+          <div class="field-group">
+            <label for="org-name">Organisation Name</label>
+            <input type="text" id="org-name" placeholder="e.g. Acme Corporation">
+          </div>
+          <div class="field-group">
+            <label for="assessor-name">Assessor Name</label>
+            <input type="text" id="assessor-name" placeholder="e.g. Jane Smith">
+          </div>
+          <div class="field-group">
+            <label for="org-industry">Industry</label>
+            <input type="text" id="org-industry" placeholder="e.g. Financial Services">
+          </div>
+          <div class="field-group">
+            <label for="org-size">Organisation Size</label>
+            <select id="org-size">
+              <option value="">Select size</option>
+              <option>1–50 employees</option>
+              <option>51–250 employees</option>
+              <option>251–1,000 employees</option>
+              <option>1,001–5,000 employees</option>
+              <option>5,000+ employees</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="gov-banner">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <p><strong>How to read this assessment:</strong> Each question targets a specific governance gap. Answers A or B directly signal a structural deficiency in your AI governance posture. Your final report names every gap explicitly — so you can act on it immediately.</p>
+      </div>
+
+      <div id="dimensions-container"></div>
+
+      <div class="submit-row">
+        <button class="btn-reset" onclick="resetAll()">Reset</button>
+        <button class="btn-submit" id="submit-btn" onclick="generateResults()" disabled>Generate Gap Report</button>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <div class="progress-card">
+        <div class="progress-header">
+          <div class="label">Progress</div>
+          <div class="count" id="progress-count">0 <span>/ 20 answered</span></div>
+        </div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-track"><div class="progress-bar-fill" id="progress-bar"></div></div>
+          <div class="progress-bar-label"><span>Governance coverage</span><span id="progress-pct">0%</span></div>
+        </div>
+        <div class="dim-progress-list" id="dim-progress-list"></div>
+      </div>
+
+      <div class="result-card" id="live-result-card">
+        <div class="result-header">
+          <div class="label">Live Governance Score</div>
+          <div class="maturity-badge" id="live-maturity-badge">—</div>
+        </div>
+        <div class="scores-grid">
+          <div class="score-item"><span class="slabel">Avg. Score</span><span class="svalue" id="live-avg">—</span></div>
+          <div class="score-item"><span class="slabel">Gaps Detected</span><span class="svalue alert" id="live-gaps">—</span></div>
+        </div>
+        <div class="recommendation">
+          <div class="rec-label">Governance Signal</div>
+          <p id="live-recommendation">Answer questions to reveal your governance gaps.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="results-page">
+  <div class="results-hero">
+    <div class="rh-label">AI Governance Gap Report — Complete</div>
+    <h2>AI Governance Report</h2>
+    <div class="org-name-display" id="results-org-display">—</div>
+  </div>
+
+  <div class="results-layout">
+    <div>
+      <div style="display:flex;gap:10px;margin-bottom:24px" class="no-print">
+        <button class="back-btn" onclick="goBack()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          Back
+        </button>
+        <button class="btn-print" onclick="printReport()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+          Save / Print PDF
+        </button>
+      </div>
+
+      <div class="maturity-panel">
+        <div class="maturity-panel-header">
+          <div class="mp-label">Overall Governance Score</div>
+          <div class="big-score" id="result-big-score">—<span> / 4.0</span></div>
+        </div>
+
+        <div class="maturity-runway">
+          <div class="runway-track">
+            <div class="runway-fill" id="runway-fill" style="width:0%"></div>
+            <div class="runway-marker" id="runway-marker" style="left:0%"></div>
+          </div>
+          <div class="runway-labels">
+            <span class="runway-label" id="rl-unprepared">Ungoverned</span>
+            <span class="runway-label" id="rl-early">Emerging</span>
+            <span class="runway-label" id="rl-ready">Governed</span>
+            <span class="runway-label" id="rl-mature">Exemplary</span>
+          </div>
+        </div>
+
+        <div class="maturity-scale">
+          <div class="scale-item" id="scale-unprepared">
+            <div class="scale-dot unprepared"></div>
+            <div class="scale-text"><div class="scale-name">Ungoverned</div><div class="scale-range">1.0 – 1.9</div></div>
+          </div>
+          <div class="scale-item" id="scale-early">
+            <div class="scale-dot early"></div>
+            <div class="scale-text"><div class="scale-name">Emerging Governance</div><div class="scale-range">2.0 – 2.6</div></div>
+          </div>
+          <div class="scale-item" id="scale-ready">
+            <div class="scale-dot ready"></div>
+            <div class="scale-text"><div class="scale-name">Governance Capable</div><div class="scale-range">2.7 – 3.3</div></div>
+          </div>
+          <div class="scale-item" id="scale-mature">
+            <div class="scale-dot mature"></div>
+            <div class="scale-text"><div class="scale-name">Governance Exemplary</div><div class="scale-range">3.4 – 4.0</div></div>
+          </div>
+        </div>
+
+        <div class="maturity-rec">
+          <div class="rec-label">Governance Verdict</div>
+          <p id="result-recommendation">—</p>
+        </div>
+      </div>
+
+      <div class="gaps-summary" id="gaps-summary-panel">
+        <div class="gs-label">Critical Governance Gaps Identified</div>
+        <div id="gaps-list"></div>
+      </div>
+    </div>
+
+    <div class="results-content">
+      <div class="chart-section">
+        <div class="chart-title">Governance Radar — Score by Dimension</div>
+        <div style="max-width:480px;margin:0 auto"><canvas id="results-chart"></canvas></div>
+      </div>
+      <div id="dim-results-container"></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span class="ft-brand">KNEURALABS</span>
+  <span class="ft-copy">© 2026 Kneuralabs LLC · Confidential · Not for distribution</span>
+  <a href="https://www.kneuralabs.com" class="ft-link">www.kneuralabs.com</a>
+</footer>
+
+<script>
+/* ============================================================
+   20 QUESTIONS · 6 AI GOVERNANCE DIMENSIONS
+   A=1 Critical Gap · B=2 Significant Gap · C=3 Partial · D=4 Mature
+   ============================================================ */
+const DIMS=[
+{
+  id:"strategy",
+  title:"AI Strategy & Ownership",
+  subtitle:"Leadership mandate, ownership clarity, and strategic alignment",
+  govTag:"Strategic Governance",
+  icon:'<svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>',
+  q:[
+    {
+      num:1,
+      text:"Who in your organisation formally owns AI governance decisions and is accountable when AI systems cause harm or fail?",
+      signal:"Ownership",
+      gap:"No named owner or accountability structure for AI governance",
+      opt:{
+        A:"Nobody — AI decisions happen organically with no designated owner",
+        B:"IT or a vendor manages AI tools informally, but no executive owns governance",
+        C:"A senior leader sponsors AI projects but has no formal governance mandate",
+        D:"A named executive or dedicated role formally owns AI governance with clear accountability"
+      }
+    },
+    {
+      num:2,
+      text:"Does your organisation have a documented AI strategy — with defined goals, scope limits, and update cadence — that leadership has formally approved?",
+      signal:"Strategy Doc",
+      gap:"No documented or living AI strategy",
+      opt:{
+        A:"No AI strategy exists — decisions are made project by project without a plan",
+        B:"There is informal thinking, but nothing written, approved, or communicated",
+        C:"A strategy exists but has not been reviewed or updated in over 12 months",
+        D:"A live AI roadmap is approved by leadership, reviewed quarterly, and tied to business goals"
+      }
+    },
+    {
+      num:3,
+      text:"How does your organisation prioritise which AI initiatives to pursue relative to their governance risk and business value?",
+      signal:"Prioritisation",
+      gap:"No risk-weighted framework for AI investment decisions",
+      opt:{
+        A:"AI tools are adopted opportunistically — whoever champions it loudest wins",
+        B:"Business value is considered, but risk and governance readiness are rarely assessed",
+        C:"A basic review exists, but there is no standardised scoring methodology",
+        D:"A structured framework evaluates all AI initiatives by value, risk, and governance readiness before approval"
+      }
+    }
+  ]
+},
+{
+  id:"process",
+  title:"Process & Deployment Controls",
+  subtitle:"How AI is approved, deployed, monitored, and corrected in operations",
+  govTag:"Operational Governance",
+  icon:'<svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><path d="M17.5 17.5L14 14"></path></svg>',
+  q:[
+    {
+      num:4,
+      text:"Is there a formal approval and testing gate that every AI tool or model must pass before going live in a production environment?",
+      signal:"Deployment Gate",
+      gap:"No pre-production AI approval or testing process",
+      opt:{
+        A:"AI tools go live immediately once purchased — there is no testing or review",
+        B:"Some informal testing happens, but there is no structured approval gate",
+        C:"A checklist exists, but adherence is inconsistent and not enforced",
+        D:"All AI systems pass a formal review covering performance, risk, bias, and compliance before deployment"
+      }
+    },
+    {
+      num:5,
+      text:"Are AI-assisted decisions in your workflows systematically logged, timestamped, and retrievable for audit or review?",
+      signal:"Auditability",
+      gap:"AI decisions are not logged or auditable",
+      opt:{
+        A:"AI outputs are used directly — no record is kept of what the AI decided or recommended",
+        B:"Some logs exist, but they are inconsistent, unstructured, and not built for audit",
+        C:"Logs are maintained for most AI-assisted decisions but are not reviewed on a cadence",
+        D:"All AI decisions are logged, timestamped, and reviewed through a structured audit programme"
+      }
+    },
+    {
+      num:6,
+      text:"When an AI system produces a harmful or incorrect output, how quickly can your organisation detect it, contain it, and restore the correct process?",
+      signal:"Incident Response",
+      gap:"No AI-specific incident detection or rollback capability",
+      opt:{
+        A:"We would likely not know until significant harm had already occurred",
+        B:"Detection depends on manual observation — there is no formal escalation path",
+        C:"We have informal escalation procedures but no tested rollback or containment protocol",
+        D:"A documented AI incident response plan with tested rollback and root-cause procedures is in place"
+      }
+    },
+    {
+      num:7,
+      text:"Before AI is applied to a business process, how thoroughly are the affected workflows documented, optimised, and baselined?",
+      signal:"Process Clarity",
+      gap:"Processes inadequately mapped before AI is applied",
+      opt:{
+        A:"Processes are largely undocumented — we automate whatever exists as-is",
+        B:"Key steps are known informally, but not formally mapped or optimised first",
+        C:"Most AI-targeted processes are documented but not routinely updated after deployment",
+        D:"All AI-targeted processes are fully mapped, optimised, and performance-baselined before AI is applied"
+      }
+    }
+  ]
+},
+{
+  id:"data",
+  title:"Data Governance & Quality",
+  subtitle:"Lineage, access controls, privacy protections, and data fitness for AI",
+  govTag:"Data Governance",
+  icon:'<svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4.03 3-9 3S3 13.66 3 12"></path><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"></path></svg>',
+  q:[
+    {
+      num:8,
+      text:"Does a documented data governance policy exist that explicitly defines which data may and may not be used to train, test, or operate AI systems?",
+      signal:"Data Policy",
+      gap:"No AI-specific data use or permissibility policy",
+      opt:{
+        A:"No data governance policy exists for any purpose",
+        B:"A general data policy exists but it does not address AI use cases at all",
+        C:"AI data use is partially addressed in policy but not consistently enforced",
+        D:"A dedicated AI data policy is maintained, reviewed by legal and compliance, and actively enforced"
+      }
+    },
+    {
+      num:9,
+      text:"Can you trace exactly which data sources feed each of your AI models or tools, who authorised that use, and when?",
+      signal:"Data Lineage",
+      gap:"No data lineage or provenance tracking for AI inputs",
+      opt:{
+        A:"We have no meaningful visibility into the data sources our AI tools actually use",
+        B:"We know broadly which systems feed AI, but there is no formal tracking or authorisation record",
+        C:"Data lineage is documented for some AI systems but not comprehensively across all deployments",
+        D:"Full data lineage and authorisation records are maintained for all AI systems and reviewed regularly"
+      }
+    },
+    {
+      num:10,
+      text:"How does your organisation protect personal, sensitive, or regulated data when it flows through AI workflows or is used in AI training?",
+      signal:"PII & Privacy",
+      gap:"No PII or sensitive data protection controls in AI pipelines",
+      opt:{
+        A:"Personal data enters AI systems with no specific controls, consent checks, or restrictions",
+        B:"We rely on vendor privacy settings but have built no internal controls or oversight",
+        C:"Some PII controls exist (e.g. anonymisation) but they are not systematic across all AI pipelines",
+        D:"All AI pipelines enforce PII anonymisation, consent tracking, data minimisation, and role-based access controls"
+      }
+    },
+    {
+      num:11,
+      text:"How is the accuracy, completeness, and freshness of data feeding your AI systems validated — and how often?",
+      signal:"Data Quality",
+      gap:"No systematic data quality validation for AI inputs",
+      opt:{
+        A:"Data quality is never formally validated — we assume the data is accurate",
+        B:"Quality is checked occasionally when errors surface, not proactively",
+        C:"Regular validation exists for some data pipelines but is not applied across all AI inputs",
+        D:"Automated data quality checks run continuously across all AI-feeding pipelines with documented thresholds"
+      }
+    }
+  ]
+},
+{
+  id:"accountability",
+  title:"Accountability & Ethical AI",
+  subtitle:"Bias controls, explainability, human oversight, and responsible AI standards",
+  govTag:"Ethical Governance",
+  icon:'<svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>',
+  q:[
+    {
+      num:12,
+      text:"Has your organisation formally defined, approved, and published a set of ethical principles that govern how AI must — and must not — be used?",
+      signal:"AI Ethics Policy",
+      gap:"No approved AI ethics policy or principles",
+      opt:{
+        A:"No ethical guidelines exist — this has not been formally discussed at any level",
+        B:"We rely on vendor ethics statements without maintaining any internal standards",
+        C:"Ethics principles are in draft or informally understood, but not formally approved or enforced",
+        D:"A published AI ethics policy governs all internal use and is enforced through mandatory training and review"
+      }
+    },
+    {
+      num:13,
+      text:"How does your organisation systematically detect, measure, and remediate bias in AI outputs that affect customers, employees, or applicants?",
+      signal:"Bias Detection",
+      gap:"No bias testing, monitoring, or remediation process",
+      opt:{
+        A:"We do not test for bias — we assume that vendor-supplied models are fair",
+        B:"Bias is only addressed reactively if a complaint or visible problem arises",
+        C:"Bias testing occurs at initial deployment but there is no ongoing monitoring programme",
+        D:"Structured bias audits run at deployment and on a recurring schedule, with documented remediation workflows"
+      }
+    },
+    {
+      num:14,
+      text:"When an AI system makes a decision that directly affects a person — such as a customer, employee, or applicant — can that decision be explained clearly, and is there a human review or appeal mechanism?",
+      signal:"Explainability",
+      gap:"AI decisions cannot be explained or challenged by affected parties",
+      opt:{
+        A:"AI decisions are black-box outputs — no explanation is possible or offered",
+        B:"Explanations are sometimes possible but depend entirely on the individual handling the case",
+        C:"Explanation guidelines exist but are not consistently applied across all AI-driven decisions",
+        D:"All AI-driven decisions include a documented plain-language explanation and a formal human review or appeal mechanism"
+      }
+    }
+  ]
+},
+{
+  id:"risk",
+  title:"Risk, Compliance & Security",
+  subtitle:"Regulatory compliance, vendor risk, and AI-specific threat management",
+  govTag:"Risk Governance",
+  icon:'<svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>',
+  q:[
+    {
+      num:15,
+      text:"Has your organisation mapped which regulations — such as GDPR, CCPA, HIPAA, or the EU AI Act — apply to each of your current and planned AI use cases?",
+      signal:"Regulatory Map",
+      gap:"No regulatory compliance mapping for AI systems",
+      opt:{
+        A:"We have not reviewed which regulations apply to our AI systems",
+        B:"We are generally aware of relevant regulations but have not mapped them to specific AI systems",
+        C:"Key regulations are identified for major AI systems, but smaller tools and edge cases are not covered",
+        D:"A comprehensive regulatory compliance map covers all AI systems and is updated when regulations change"
+      }
+    },
+    {
+      num:16,
+      text:"How thoroughly are third-party AI vendors and tools assessed for security vulnerabilities, compliance posture, and data handling practices before being approved for use?",
+      signal:"Vendor Risk",
+      gap:"No structured vendor AI risk assessment process",
+      opt:{
+        A:"We adopt AI vendors based on reputation or convenience — no formal assessment is conducted",
+        B:"We review vendor terms of service but do not conduct security or compliance due diligence",
+        C:"A standard vendor assessment is done, but it does not specifically address AI-related risks",
+        D:"All AI vendors undergo a dedicated security, compliance, and AI-specific risk assessment before onboarding"
+      }
+    },
+    {
+      num:17,
+      text:"Does your organisation have specific controls to defend against AI-targeted threats — such as prompt injection, adversarial inputs, model inversion, or data poisoning?",
+      signal:"AI Security",
+      gap:"No AI-specific cybersecurity controls in place",
+      opt:{
+        A:"We are not aware of AI-specific threats and have no controls targeting them",
+        B:"We rely on general cybersecurity policies but have no AI-specific threat detection or controls",
+        C:"Some AI-targeted controls exist for critical systems but coverage across all deployments is incomplete",
+        D:"AI-specific security controls are implemented, tested regularly, and reviewed against emerging threat intelligence"
+      }
+    }
+  ]
+},
+{
+  id:"culture",
+  title:"Culture, Talent & Change Management",
+  subtitle:"AI literacy, human enablement, and governance adoption across the organisation",
+  govTag:"People Governance",
+  icon:'<svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>',
+  q:[
+    {
+      num:18,
+      text:"What proportion of employees who regularly use or are affected by AI tools have completed formal, role-specific training on responsible AI use, its limitations, and their governance obligations?",
+      signal:"AI Literacy",
+      gap:"Workforce lacks mandatory AI governance literacy training",
+      opt:{
+        A:"No formal AI training programme exists for any employees",
+        B:"Training is ad hoc, informal, and only available to those who actively request it",
+        C:"Training exists and is available, but completion is not tracked, required, or kept current",
+        D:"All relevant employees complete mandatory, role-specific AI literacy training that is refreshed regularly"
+      }
+    },
+    {
+      num:19,
+      text:"Is there a clear, accessible, and psychologically safe channel for employees to report AI errors, flag ethical concerns, or challenge AI-driven decisions — without fear of repercussion?",
+      signal:"Speak-Up Channel",
+      gap:"No safe mechanism for employees to report AI concerns or errors",
+      opt:{
+        A:"No formal mechanism exists — concerns must be raised informally through a manager",
+        B:"General HR or compliance channels exist but are not designed or promoted for AI-specific concerns",
+        C:"An AI-specific reporting channel exists but lacks broad awareness or guaranteed follow-up",
+        D:"A well-publicised AI ethics reporting channel offers guaranteed anonymity, documented response timelines, and visible follow-through"
+      }
+    },
+    {
+      num:20,
+      text:"How visibly and consistently does senior leadership model responsible AI governance behaviours — beyond signing policy documents — in ways that shape day-to-day organisational culture?",
+      signal:"Leadership Signal",
+      gap:"Leadership does not actively model or reinforce AI governance as a cultural priority",
+      opt:{
+        A:"Leadership is not visibly engaged with AI governance beyond approving tools or budgets",
+        B:"Leadership mentions AI governance occasionally but does not hold teams accountable for it",
+        C:"Leaders discuss governance in strategic forums but it is not embedded in performance culture or daily behaviour",
+        D:"Leadership publicly champions responsible AI, holds teams accountable, and integrates governance into performance reviews and team rituals"
+      }
+    }
+  ]
+}
+];
+
+const TOTAL_Q=20;
+const SM={A:1,B:2,C:3,D:4};
+const ans={},rem={};
+let chart=null;
+
+const MAT=[
+  {id:"unprepared",min:1,max:1.9,label:"Ungoverned",status:"unprepared",rec:"Your AI operations carry significant unmanaged legal, ethical, and operational risk. Governance foundations — ownership, policy, data controls, ethics guidelines, and incident response — must be established before scaling any AI. Immediate action required."},
+  {id:"early",min:2,max:2.6,label:"Emerging Governance",status:"early",rec:"Governance foundations are forming but critical gaps remain in several dimensions. Prioritise formalising ownership, audit trails, compliance mapping, and bias controls. A structured governance programme over 60–90 days will close the most dangerous exposures."},
+  {id:"ready",min:2.7,max:3.3,label:"Governance Capable",status:"ready",rec:"Core governance is in place. The priority now is consistency, automation, and embedding governance into culture and day-to-day workflows. Targeted work on your lowest-scoring dimensions will move you to exemplary status."},
+  {id:"mature",min:3.4,max:4,label:"Governance Exemplary",status:"mature",rec:"Your AI governance posture is strong and comprehensive. Focus on continuous improvement — external audits, industry benchmarking, proactive engagement with emerging regulation, and governance innovation."}
+];
+
+function getM(a){return MAT.find(m=>a>=m.min&&a<=m.max)||MAT[0];}
+
+function countGaps(){return Object.values(ans).filter(v=>v==='A'||v==='B').length;}
+
+function getGapList(){
+  const gaps=[];
+  DIMS.forEach(d=>{
+    d.q.forEach(q=>{
+      if(ans[q.num]==='A'||ans[q.num]==='B'){
+        gaps.push({dim:d.title,signal:q.signal,gap:q.gap,severity:ans[q.num]==='A'?'Critical':'Significant'});
+      }
+    });
+  });
+  return gaps;
+}
+
+function build(){
+  const c=document.getElementById("dimensions-container"),pl=document.getElementById("dim-progress-list");
+  c.innerHTML="";pl.innerHTML="";
+  DIMS.forEach(d=>{
+    const qs=d.q.map(q=>`
+      <div class="question-row" id="qrow-${q.num}">
+        <div class="q-header">
+          <span class="q-num">Q${q.num}</span>
+          <span class="q-text">${q.text}</span>
+          <span class="q-signal">${q.signal}</span>
+        </div>
+        <div class="options-grid">
+          ${Object.entries(q.opt).map(([k,v])=>`
+            <button class="option-btn" data-q="${q.num}" data-key="${k}" onclick="selectAnswer(${q.num},'${k}',this)">
+              <span class="option-key">${k}</span>
+              <span class="option-text">${v}</span>
+            </button>`).join("")}
+        </div>
+        <button class="add-note-trigger" id="note-trigger-${q.num}" style="display:none" onclick="addNote(${q.num})">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add note
+        </button>
+      </div>
+      <div class="remarks-row" id="remarks-row-${q.num}">
+        <textarea class="remarks-input" placeholder="Optional context or remark…" rows="2" oninput="rem[${q.num}]=this.value"></textarea>
+      </div>`).join("");
+
+    const el=document.createElement("div");
+    el.className="dimension open";
+    el.id=`dim-${d.id}`;
+    el.innerHTML=`
+      <div class="dimension-header" onclick="toggleDim('${d.id}')">
+        <div class="dim-icon">${d.icon}</div>
+        <div class="dim-title-block">
+          <div class="dim-title">${d.title}</div>
+          <div class="dim-subtitle">${d.subtitle}</div>
+        </div>
+        <span class="dim-gov-tag">${d.govTag}</span>
+        <div class="dim-score-badge" id="dim-badge-${d.id}">0 / ${d.q.length}</div>
+        <svg class="dim-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </div>
+      <div class="dimension-body">${qs}</div>`;
+    c.appendChild(el);
+
+    const pi=document.createElement("div");
+    pi.className="dim-progress-item";
+    pi.innerHTML=`<div class="dim-dot" id="dimDot-${d.id}"></div><span class="dim-progress-label">${d.title}</span><span class="dim-progress-count" id="dimPC-${d.id}">0/${d.q.length}</span>`;
+    pl.appendChild(pi);
+  });
+}
+
+function toggleDim(id){document.getElementById(`dim-${id}`).classList.toggle("open");}
+
+function selectAnswer(q,k,btn){
+  btn.closest(".question-row").querySelectorAll(".option-btn").forEach(b=>b.classList.remove("selected"));
+  btn.classList.add("selected");
+  ans[q]=k;
+  document.getElementById(`note-trigger-${q}`).style.display="inline-flex";
+  update();
+}
+
+function addNote(q){
+  document.getElementById(`note-trigger-${q}`).style.display="none";
+  const rr=document.getElementById(`remarks-row-${q}`);
+  rr.classList.add("visible");
+  rr.querySelector("textarea")?.focus();
+}
+
+function update(){
+  const a=Object.keys(ans).length,t=TOTAL_Q,p=Math.round(a/t*100);
+  document.getElementById("progress-count").innerHTML=`${a} <span>/ ${t} answered</span>`;
+  document.getElementById("progress-bar").style.width=p+"%";
+  document.getElementById("progress-pct").textContent=p+"%";
+
+  DIMS.forEach(d=>{
+    const da=d.q.filter(q=>ans[q.num]).length,to=d.q.length;
+    document.getElementById(`dim-badge-${d.id}`).textContent=`${da}/${to}`;
+    document.getElementById(`dimPC-${d.id}`).textContent=`${da}/${to}`;
+    const dot=document.getElementById(`dimDot-${d.id}`);
+    dot.className="dim-dot"+(da===to?" complete":da>0?" partial":"");
+  });
+
+  document.getElementById("submit-btn").disabled=a<t;
+
+  if(a){
+    const vals=Object.values(ans).map(v=>SM[v]);
+    const tot=vals.reduce((x,y)=>x+y,0);
+    const avg=tot/vals.length;
+    const m=getM(avg);
+    const gaps=countGaps();
+
+    document.getElementById("live-result-card").classList.add("visible");
+    document.getElementById("live-avg").textContent=avg.toFixed(2);
+    const gapEl=document.getElementById("live-gaps");
+    gapEl.textContent=gaps+(gaps===1?" gap":" gaps");
+    gapEl.className="svalue"+(gaps>5?" alert":gaps>2?" alert":"");
+    const badge=document.getElementById("live-maturity-badge");
+    badge.textContent=m.label;
+    badge.className=`maturity-badge ${m.status}`;
+    document.getElementById("live-recommendation").textContent=m.rec;
+  }
+}
+
+function resetAll(){
+  Object.keys(ans).forEach(k=>delete ans[k]);
+  Object.keys(rem).forEach(k=>delete rem[k]);
+  document.querySelectorAll(".option-btn").forEach(b=>b.classList.remove("selected"));
+  document.querySelectorAll(".remarks-row").forEach(r=>r.classList.remove("visible"));
+  document.querySelectorAll(".remarks-input").forEach(i=>i.value="");
+  document.querySelectorAll("[id^='note-trigger-']").forEach(t=>t.style.display="none");
+  document.getElementById("live-result-card").classList.remove("visible");
+  document.getElementById("submit-btn").disabled=true;
+  update();
+}
+
+function generateResults(){
+  const vals=Object.values(ans).map(v=>SM[v]);
+  const tot=vals.reduce((x,y)=>x+y,0);
+  const avg=tot/vals.length;
+  const m=getM(avg);
+  const org=document.getElementById("org-name").value||"Your Organisation";
+  const ass=document.getElementById("assessor-name").value;
+
+  document.getElementById("results-org-display").textContent=org+(ass?` · Assessed by ${ass}`:"");
+  document.getElementById("result-big-score").innerHTML=`${avg.toFixed(2)}<span> / 4.0</span>`;
+  document.getElementById("result-recommendation").textContent=m.rec;
+
+  setTimeout(()=>{
+    const p=Math.max(0,Math.min(100,((avg-1)/3)*100));
+    document.getElementById("runway-fill").style.width=p+"%";
+    document.getElementById("runway-marker").style.left=p+"%";
+  },300);
+
+  ["unprepared","early","ready","mature"].forEach(id=>document.getElementById(`rl-${id}`)?.classList.remove("active"));
+  document.getElementById(`rl-${m.id}`)?.classList.add("active");
+  ["unprepared","early","ready","mature"].forEach(id=>document.getElementById(`scale-${id}`).classList.remove("current"));
+  document.getElementById(`scale-${m.id}`).classList.add("current");
+
+  // Build gap summary
+  const gaps=getGapList();
+  const gapsList=document.getElementById("gaps-list");
+  gapsList.innerHTML="";
+  if(gaps.length===0){
+    gapsList.innerHTML='<div class="gap-item" style="color:var(--kn-emerald)">No critical or significant governance gaps detected. Your posture is strong across all dimensions.</div>';
+  }else{
+    gaps.forEach(g=>{
+      const item=document.createElement("div");
+      item.className="gap-item";
+      item.innerHTML=`<span class="gap-badge ${g.severity.toLowerCase()}">${g.severity}</span><div><div style="font-weight:600;margin-bottom:2px">${g.gap}</div><div style="color:var(--kn-slate);font-size:10px;font-family:var(--kn-mono);letter-spacing:0.04em">${g.dim} · ${g.signal}</div></div>`;
+      gapsList.appendChild(item);
+    });
+  }
+
+  // Build dimension cards
+  const cont=document.getElementById("dim-results-container");
+  const lbls=[],data=[];
+  cont.innerHTML="";
+
+  DIMS.forEach(d=>{
+    const ds=d.q.map(q=>ans[q.num]?SM[ans[q.num]]:0);
+    const dt=ds.reduce((x,y)=>x+y,0);
+    const da=dt/ds.length;
+    lbls.push(d.title.split(" ").slice(0,2).join(" "));
+    data.push(+da.toFixed(2));
+    const scoreClass=da<2?"low":da<3?"mid":"high";
+
+    const qs=d.q.map(q=>{
+      const isA=ans[q.num]==='A',isB=ans[q.num]==='B';
+      const gapTag=isA?`<div class="dqr-gap critical">Critical Gap: ${q.gap}</div>`:isB?`<div class="dqr-gap significant">Governance Gap: ${q.gap}</div>`:"";
+      return `
+        <div class="dim-q-result">
+          <span class="dqr-num">Q${q.num}</span>
+          <div style="flex:1">
+            <div class="dqr-text">${q.text}</div>
+            ${gapTag}
+            ${rem[q.num]?`<div class="dqr-remark">${rem[q.num]}</div>`:""}
+          </div>
+          <span class="dqr-answer">${ans[q.num]||"—"} · ${ans[q.num]?SM[ans[q.num]]:0}/4</span>
+        </div>`;
+    }).join("");
+
+    const card=document.createElement("div");
+    card.className="dim-result-card";
+    card.innerHTML=`
+      <div class="dim-result-header">
+        <div class="dim-icon">${d.icon}</div>
+        <div class="dim-result-title">${d.title}</div>
+        <div class="dim-result-score ${scoreClass}">${da.toFixed(2)}<span> / 4.0</span></div>
+      </div>
+      <div class="score-bar-track"><div class="score-bar-fill" style="width:${((da-1)/3)*100}%"></div></div>
+      <div class="dim-result-body">${qs}</div>`;
+    cont.appendChild(card);
+  });
+
+  // Radar chart
+  if(chart)chart.destroy();
+  const ctx=document.getElementById("results-chart").getContext("2d");
+  chart=new Chart(ctx,{
+    type:"radar",
+    data:{
+      labels:lbls,
+      datasets:[{
+        label:"Governance Score",
+        data:data,
+        backgroundColor:"rgba(141,163,176,0.12)",
+        borderColor:"#7E9B8A",
+        borderWidth:2,
+        pointBackgroundColor:data.map(v=>v<2?"#C0392B":v<3?"#D4860A":"#7E9B8A"),
+        pointBorderColor:"#FFFFFF",
+        pointRadius:5
+      }]
+    },
+    options:{
+      responsive:true,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.r.toFixed(2)} / 4.0`}}
+      },
+      scales:{
+        r:{
+          min:0,max:4,
+          ticks:{stepSize:1,font:{family:"'Courier New',monospace",size:10},color:"#5C5A55"},
+          grid:{color:"rgba(92,90,85,0.15)"},
+          pointLabels:{font:{family:"'Inter',sans-serif",size:11,weight:"600"},color:"#1C1B19"}
+        }
+      }
+    }
+  });
+
+  // Reveal overlay
+  const ov=document.getElementById("reveal-overlay");
+  const tierEl=document.getElementById("reveal-maturity-tier");
+  const scoreEl=document.getElementById("reveal-score-display");
+  const scanEl=document.getElementById("reveal-scan-line");
+  tierEl.textContent=m.label;
+  scoreEl.innerHTML=`0.00<span> / 4.0</span>`;
+  ov.classList.add("active");
+
+  const govTags=DIMS.map(d=>d.govTag);
+  let idx=0;
+  if(scanEl){
+    scanEl.classList.add("visible");
+    const iv=setInterval(()=>{
+      if(idx<govTags.length){scanEl.textContent=`Scanning · ${govTags[idx]}`;idx++;}
+      else{clearInterval(iv);scanEl.textContent="Gap analysis complete";setTimeout(()=>scanEl.classList.remove("visible"),300);}
+    },130);
+  }
+
+  const start=performance.now(),dur=1200;
+  function count(now){
+    const e=now-start,p=Math.min(e/dur,1),cur=(p<1?(1-Math.pow(1-p,3))*avg:avg).toFixed(2);
+    scoreEl.innerHTML=`${cur}<span> / 4.0</span>`;
+    if(p<1)requestAnimationFrame(count);
+  }
+  setTimeout(()=>requestAnimationFrame(count),500);
+  setTimeout(()=>{
+    ov.classList.remove("active");
+    setTimeout(()=>{
+      document.getElementById("assessment-page").classList.add("hidden");
+      document.getElementById("results-page").classList.add("visible");
+      window.scrollTo({top:0});
+    },450);
+  },2600);
+}
+
+function goBack(){
+  document.getElementById("assessment-page").classList.remove("hidden");
+  document.getElementById("results-page").classList.remove("visible");
+  const f=document.getElementById("runway-fill"),mk=document.getElementById("runway-marker");
+  if(f)f.style.width="0%";
+  if(mk)mk.style.left="0%";
+  ["unprepared","early","ready","mature"].forEach(id=>document.getElementById(`rl-${id}`)?.classList.remove("active"));
+  window.scrollTo({top:0});
+}
+
+function printReport(){window.print();}
+
+build();update();
+</script>
+</body>
+</html>
