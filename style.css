@@ -180,5 +180,126 @@ footer{background:var(--kn-navy);border-top:2px solid var(--kn-primary);padding:
 .ft-brand{font-family:var(--kn-mono);font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--kn-primary);}
 .ft-copy{font-size:11px;color:var(--kn-slate);}
 .ft-link{font-family:var(--kn-mono);font-size:10px;color:var(--kn-teal);text-decoration:underline;letter-spacing:0.04em;}
-@media print{.no-print{display:none;}.results-hero{background:var(--kn-navy)!important;border-left:4px solid var(--kn-primary)!important;}.results-hero h2,.results-hero .org-name-display{color:var(--kn-white)!important;}.runway-fill{print-color-adjust:exact;}body{background:var(--kn-white);}}
-@media(max-width:768px){header{padding:0 var(--kn-16);}.hero{padding:var(--kn-48) var(--kn-16);}.layout{grid-template-columns:1fr;padding:var(--kn-32) var(--kn-16) var(--kn-64);}.results-layout{grid-template-columns:1fr;padding:var(--kn-32) var(--kn-16) var(--kn-64);}.org-fields{grid-template-columns:1fr;}.options-grid{grid-template-columns:1fr;}footer{flex-direction:column;gap:var(--kn-8);text-align:center;padding:var(--kn-32) var(--kn-16);}.q-signal{display:none;}.dim-gov-tag{display:none;}}
+@media print{
+  .no-print{display:none!important;}
+  *{transition:none!important;animation:none!important;}
+  html{background:#fff!important;}
+  body{background:#fff!important;color:#1C1B19!important;}
+  [data-theme="dark"] body,[data-theme="dark"] header,[data-theme="dark"] .org-section,[data-theme="dark"] .dimension,[data-theme="dark"] .progress-card,[data-theme="dark"] .result-card,[data-theme="dark"] .chart-section,[data-theme="dark"] .dim-result-card,[data-theme="dark"] .maturity-panel,[data-theme="dark"] .gaps-summary{background:#fff!important;border-color:#F2F1EE!important;color:#1C1B19!important;}
+  [data-theme="dark"] .dim-result-header,[data-theme="dark"] .maturity-panel-header,[data-theme="dark"] .result-header{background:#F2F1EE!important;}
+  [data-theme="dark"] .q-text,[data-theme="dark"] .option-text,[data-theme="dark"] .dim-title,[data-theme="dark"] .dim-result-title,[data-theme="dark"] .big-score,[data-theme="dark"] .scale-name,[data-theme="dark"] .maturity-rec p,[data-theme="dark"] .gap-item,[data-theme="dark"] .dqr-answer,[data-theme="dark"] .dqr-text,[data-theme="dark"] .recommendation p,[data-theme="dark"] .score-item .svalue{color:#1C1B19!important;}
+  .results-hero{background:#1C1B19!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .results-hero h2,.results-hero .org-name-display,.results-hero .rh-label{color:#fff!important;}
+  .runway-fill,.score-bar-fill,.progress-bar-fill{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  header{background:#fff!important;border-bottom:2px solid #7E9B8A!important;}
+  .wordmark{color:#1C1B19!important;}
+  .maturity-runway,.maturity-scale,.maturity-panel,.gaps-summary,.dim-result-card,.chart-section{page-break-inside:avoid;}
+  footer{background:#1C1B19!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+}
+@media(max-width:768px){header{padding:0 var(--kn-16);}.hero{padding:var(--kn-48) var(--kn-16);}.layout{grid-template-columns:1fr;padding:var(--kn-32) var(--kn-16) var(--kn-64);}.results-layout{grid-template-columns:1fr;padding:var(--kn-32) var(--kn-16) var(--kn-64);}.org-fields{grid-template-columns:1fr;}.options-grid{grid-template-columns:1fr;}footer{flex-direction:column;gap:var(--kn-8);text-align:center;padding:var(--kn-32) var(--kn-16);}.q-signal{display:none;}.dim-gov-tag{display:none;}.header-tagline{display:none;}}
+
+/* ─── SMOOTH THEME TRANSITIONS ─── */
+body,header,footer,.org-section,.dimension,.dimension-header,.progress-card,.result-card,.chart-section,.dim-result-card,.maturity-panel,.gaps-summary,.option-btn,.field-group input,.field-group select,.remarks-input,.back-btn,.btn-reset,.btn-print,.dim-result-header,.maturity-panel-header,.result-header,.gov-banner,.progress-bar-track,.score-bar-track{transition:background 0.28s cubic-bezier(0.4,0,0.2,1),color 0.28s cubic-bezier(0.4,0,0.2,1),border-color 0.28s cubic-bezier(0.4,0,0.2,1),box-shadow 0.2s;}
+
+/* ─── APPLE-GRADE ANIMATIONS ─── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pop{0%{transform:scale(1)}35%{transform:scale(0.965)}70%{transform:scale(1.018)}100%{transform:scale(1)}}
+@keyframes shimmerIn{from{opacity:0;transform:scale(0.97)}to{opacity:1;transform:scale(1)}}
+.dimension{animation:fadeUp 0.45s cubic-bezier(0.25,0.46,0.45,0.94) both;}
+.dimension:nth-child(1){animation-delay:0s}.dimension:nth-child(2){animation-delay:0.06s}.dimension:nth-child(3){animation-delay:0.12s}.dimension:nth-child(4){animation-delay:0.18s}.dimension:nth-child(5){animation-delay:0.24s}.dimension:nth-child(6){animation-delay:0.30s}
+.option-btn{transition:border-color 0.18s,background 0.18s,transform 0.15s,box-shadow 0.15s;}
+.option-btn:active{transform:scale(0.98);}
+.option-btn.selected{animation:pop 0.28s cubic-bezier(0.34,1.56,0.64,1);}
+.dim-result-card{animation:fadeUp 0.42s cubic-bezier(0.25,0.46,0.45,0.94) both;}
+.dim-result-card:nth-child(1){animation-delay:0.05s}.dim-result-card:nth-child(2){animation-delay:0.1s}.dim-result-card:nth-child(3){animation-delay:0.15s}.dim-result-card:nth-child(4){animation-delay:0.2s}.dim-result-card:nth-child(5){animation-delay:0.25s}.dim-result-card:nth-child(6){animation-delay:0.3s}
+.maturity-panel{animation:shimmerIn 0.35s cubic-bezier(0.25,0.46,0.45,0.94) both;}
+.gaps-summary{animation:fadeUp 0.4s cubic-bezier(0.25,0.46,0.45,0.94) 0.1s both;}
+.chart-section{animation:fadeUp 0.4s cubic-bezier(0.25,0.46,0.45,0.94) 0.05s both;}
+.result-card.visible{animation:shimmerIn 0.3s cubic-bezier(0.25,0.46,0.45,0.94) both;}
+.hero{animation:fadeUp 0.5s cubic-bezier(0.25,0.46,0.45,0.94) both;}
+
+/* ─── THEME TOGGLE BUTTON ─── */
+.header-actions{display:flex;align-items:center;gap:var(--kn-16);}
+.theme-toggle{background:transparent;border:1px solid rgba(126,155,138,0.3);width:34px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--kn-slate);transition:border-color 0.18s,transform 0.3s cubic-bezier(0.34,1.56,0.64,1),background 0.18s;}
+.theme-toggle:hover{border-color:var(--kn-primary);background:rgba(126,155,138,0.08);transform:rotate(22deg) scale(1.08);}
+.theme-toggle svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;transition:opacity 0.2s;}
+.sun-icon,.moon-icon{position:absolute;transition:opacity 0.25s,transform 0.3s cubic-bezier(0.34,1.56,0.64,1);}
+[data-theme="dark"] .sun-icon{opacity:1;transform:rotate(0deg) scale(1);}
+[data-theme="dark"] .moon-icon{opacity:0;transform:rotate(-30deg) scale(0.7);}
+[data-theme="light"] .sun-icon,[data-theme=""] .sun-icon{opacity:0;transform:rotate(30deg) scale(0.7);}
+[data-theme="light"] .moon-icon,[data-theme=""] .moon-icon{opacity:1;transform:rotate(0deg) scale(1);}
+.theme-toggle{position:relative;overflow:hidden;}
+
+/* ─── DARK MODE OVERRIDES ─── */
+[data-theme="dark"] body{background:#0D0D0B;color:#E8E6DF;}
+[data-theme="dark"] header{background:#131311;border-bottom-color:#263D33;}
+[data-theme="dark"] .wordmark{color:#E8E6DF;}
+[data-theme="dark"] .header-tagline{color:#6A6860;}
+[data-theme="dark"] footer{background:#0A0A09;border-top-color:#263D33;}
+[data-theme="dark"] .org-section,[data-theme="dark"] .dimension,[data-theme="dark"] .progress-card,[data-theme="dark"] .result-card,[data-theme="dark"] .chart-section,[data-theme="dark"] .dim-result-card,[data-theme="dark"] .maturity-panel,[data-theme="dark"] .gaps-summary,[data-theme="dark"] .back-btn{background:#131311;border-color:#232320;}
+[data-theme="dark"] .dimension-header{border-bottom-color:#232320;}
+[data-theme="dark"] .dimension-header:hover{background:#1A1A17;}
+[data-theme="dark"] .dimension-body{background:#131311;}
+[data-theme="dark"] .org-section h3{color:#6A6860;}
+[data-theme="dark"] .gov-banner{background:rgba(126,155,138,0.04);border-color:rgba(126,155,138,0.14);}
+[data-theme="dark"] .gov-banner strong{color:#E8E6DF;}
+[data-theme="dark"] .gov-banner p{color:#8A8880;}
+[data-theme="dark"] .field-group label{color:#B8B6AF;}
+[data-theme="dark"] .field-group input,[data-theme="dark"] .field-group select{background:#1A1A17;border-color:#232320;color:#E8E6DF;}
+[data-theme="dark"] .field-group input:focus,[data-theme="dark"] .field-group select:focus{background:#1F1F1C;border-color:var(--kn-primary);}
+[data-theme="dark"] .field-group select option{background:#1A1A17;color:#E8E6DF;}
+[data-theme="dark"] .question-row{border-bottom-color:#232320;}
+[data-theme="dark"] .q-text{color:#E8E6DF;}
+[data-theme="dark"] .q-signal{background:#232320;border-color:#2E2E2B;color:#6A6860;}
+[data-theme="dark"] .dim-gov-tag{background:rgba(126,155,138,0.06);border-color:rgba(126,155,138,0.18);}
+[data-theme="dark"] .dim-score-badge{background:#232320;border-color:#2E2E2B;color:#8A8880;}
+[data-theme="dark"] .dim-title{color:#E8E6DF;}
+[data-theme="dark"] .dim-subtitle{color:#8A8880;}
+[data-theme="dark"] .dim-progress-label{color:#E8E6DF;}
+[data-theme="dark"] .progress-bar-track{background:#232320;}
+[data-theme="dark"] .progress-bar-wrap{border-bottom-color:#232320;}
+[data-theme="dark"] .progress-header{background:#0A0A09;}
+[data-theme="dark"] .progress-header .count{color:#E8E6DF;}
+[data-theme="dark"] .progress-header .label{color:#6A6860;}
+[data-theme="dark"] .dim-progress-count{color:#6A6860;}
+[data-theme="dark"] .option-btn{background:#1A1A17;border-color:#232320;}
+[data-theme="dark"] .option-btn:hover{background:rgba(126,155,138,0.07);border-color:var(--kn-primary);}
+[data-theme="dark"] .option-btn.selected{background:rgba(126,155,138,0.09);border-color:var(--kn-primary);}
+[data-theme="dark"] .option-text{color:#E8E6DF;}
+[data-theme="dark"] .remarks-input{background:#1A1A17;border-color:#232320;color:#E8E6DF;}
+[data-theme="dark"] .add-note-trigger{color:#6A6860;}
+[data-theme="dark"] .scores-grid{border-bottom-color:#232320;}
+[data-theme="dark"] .score-item .svalue{color:#E8E6DF;}
+[data-theme="dark"] .recommendation p{color:#E8E6DF;}
+[data-theme="dark"] .result-header{background:#1A1A17;border-bottom-color:#232320;}
+[data-theme="dark"] .result-header .label{color:#6A6860;}
+[data-theme="dark"] .dim-result-header{background:#1A1A17;border-bottom-color:#232320;}
+[data-theme="dark"] .dim-result-title{color:#E8E6DF;}
+[data-theme="dark"] .dim-q-result{border-bottom-color:#232320;}
+[data-theme="dark"] .dqr-text{color:#8A8880;}
+[data-theme="dark"] .dqr-answer{color:#E8E6DF;}
+[data-theme="dark"] .score-bar-track{background:rgba(255,255,255,0.06);}
+[data-theme="dark"] .maturity-panel-header{background:#1A1A17;border-bottom-color:#232320;}
+[data-theme="dark"] .maturity-panel-header .mp-label{color:#6A6860;}
+[data-theme="dark"] .big-score{color:#E8E6DF;}
+[data-theme="dark"] .maturity-runway{border-bottom-color:#232320;}
+[data-theme="dark"] .runway-track{background:#232320;border-color:#2E2E2B;}
+[data-theme="dark"] .runway-marker{background:#131311;border-color:var(--kn-primary);}
+[data-theme="dark"] .maturity-scale{border-bottom-color:#232320;}
+[data-theme="dark"] .scale-name{color:#E8E6DF;}
+[data-theme="dark"] .maturity-rec p{color:#E8E6DF;}
+[data-theme="dark"] .maturity-rec .rec-label{color:#6A6860;}
+[data-theme="dark"] .gap-item{border-bottom-color:#232320;color:#E8E6DF;}
+[data-theme="dark"] .gaps-summary .gs-label{color:var(--kn-alert);}
+[data-theme="dark"] .back-btn{color:#8A8880;border-color:#232320;}
+[data-theme="dark"] .back-btn:hover{border-color:#8A8880;}
+[data-theme="dark"] .btn-print{background:#E8E6DF;color:#0D0D0B;}
+[data-theme="dark"] .btn-reset{background:#1A1A17;border-color:#232320;color:#8A8880;}
+[data-theme="dark"] .btn-submit:disabled{background:#232320;color:#6A6860;}
+[data-theme="dark"] .chart-title{color:#6A6860;}
+[data-theme="dark"] .runway-label{color:#6A6860;}
+[data-theme="dark"] .runway-label.active{color:var(--kn-primary);}
+[data-theme="dark"] .theme-toggle{border-color:rgba(126,155,138,0.25);color:#8A8880;}
+[data-theme="dark"] .theme-toggle:hover{border-color:var(--kn-primary);background:rgba(126,155,138,0.08);}
+[data-theme="dark"] .scale-range{color:#6A6860;}
+[data-theme="dark"] .progress-bar-label{color:#6A6860;}
