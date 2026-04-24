@@ -197,27 +197,152 @@ footer{background:var(--kn-navy);border-top:2px solid var(--kn-primary);padding:
   .maturity-runway,.maturity-scale,.maturity-panel,.gaps-summary,.dim-result-card,.chart-section{page-break-inside:avoid;}
   footer{background:#1C1B19!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
 }
-@media(max-width:768px){header{padding:0 var(--kn-16);}.hero{padding:var(--kn-48) var(--kn-16);}.layout{grid-template-columns:1fr;padding:var(--kn-32) var(--kn-16) var(--kn-64);}.results-layout{grid-template-columns:1fr;padding:var(--kn-32) var(--kn-16) var(--kn-64);}.org-fields{grid-template-columns:1fr;}.options-grid{grid-template-columns:1fr;}footer{flex-direction:column;gap:var(--kn-8);text-align:center;padding:var(--kn-32) var(--kn-16);}.q-signal{display:none;}.dim-gov-tag{display:none;}.header-tagline{display:none;}}
+/* ─── RESPONSIVE: TABLET LANDSCAPE & SMALL LAPTOP (769–1080px) ─── */
+@media(min-width:769px) and (max-width:1080px){
+  .layout{grid-template-columns:1fr 268px;padding:var(--kn-32) var(--kn-32) var(--kn-64);}
+  .results-layout{grid-template-columns:240px 1fr;padding:var(--kn-32) var(--kn-32) var(--kn-64);}
+  .hero,.results-hero{padding-left:var(--kn-32);padding-right:var(--kn-32);}
+  footer{padding-left:var(--kn-32);padding-right:var(--kn-32);}
+}
+
+/* ─── RESPONSIVE: TABLET PORTRAIT (481–768px) ─── */
+@media(max-width:768px){
+  header{padding:0 var(--kn-32);height:58px;}
+  .hero{padding:var(--kn-48) var(--kn-32) var(--kn-32);}
+  .hero p{font-size:0.9rem;}
+  .hero-meta{gap:var(--kn-24,24px);}
+  .layout{grid-template-columns:1fr;padding:var(--kn-32) var(--kn-32) var(--kn-64);gap:var(--kn-32);}
+  .sidebar{position:static;top:auto;}
+  .results-layout{grid-template-columns:1fr;padding:var(--kn-32) var(--kn-32) var(--kn-64);}
+  .results-hero{padding:var(--kn-48) var(--kn-32);}
+  .maturity-panel{position:static;}
+  .org-fields{grid-template-columns:1fr;}
+  .options-grid{grid-template-columns:1fr 1fr;}
+  .q-signal{display:none;}
+  .dim-gov-tag{display:none;}
+  .header-tagline{display:none;}
+  footer{flex-direction:column;gap:var(--kn-8);text-align:center;padding:var(--kn-32);}
+}
+
+/* ─── RESPONSIVE: MOBILE PORTRAIT (≤480px) ─── */
+@media(max-width:480px){
+  :root{--kn-logo-nav:28px;}
+  header{padding:0 var(--kn-16);height:52px;}
+  .wordmark{font-size:13px;letter-spacing:0.05em;}
+  .hero{padding:var(--kn-32) var(--kn-16);gap:12px;}
+  .hero h1{font-size:clamp(1.25rem,6vw,1.6rem);}
+  .hero p{font-size:0.82rem;max-width:100%;}
+  .hero-meta{gap:var(--kn-16);flex-wrap:wrap;}
+  .hero-meta-item .value{font-size:12px;}
+  .layout{grid-template-columns:1fr;padding:var(--kn-16) var(--kn-16) var(--kn-48);gap:var(--kn-16);}
+  .sidebar{position:static;}
+  .results-layout{grid-template-columns:1fr;padding:var(--kn-16) var(--kn-16) var(--kn-48);}
+  .results-hero{padding:var(--kn-32) var(--kn-16);}
+  .results-hero h2{font-size:clamp(1.2rem,5vw,1.5rem);}
+  .maturity-panel{position:static;}
+  .big-score{font-size:38px;}
+  .options-grid{grid-template-columns:1fr;padding-left:0;}
+  .org-section{padding:var(--kn-16);}
+  .org-fields{grid-template-columns:1fr;}
+  .q-header{flex-wrap:wrap;gap:8px;}
+  .q-signal,.dim-gov-tag,.header-tagline{display:none;}
+  .q-num{min-width:auto;}
+  .submit-row{flex-direction:column-reverse;gap:var(--kn-8);}
+  .btn-submit,.btn-reset{width:100%;text-align:center;justify-content:center;padding:13px;}
+  .dim-result-header{flex-wrap:wrap;gap:10px;}
+  .dim-result-score{font-size:16px;}
+  .maturity-runway{padding:var(--kn-8) var(--kn-16);}
+  .runway-label{font-size:8px;letter-spacing:0.04em;}
+  .maturity-scale{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .chart-section{padding:var(--kn-16);}
+  .dimension-header{padding:14px var(--kn-16);gap:10px;}
+  .question-row{padding:var(--kn-16);}
+  .remarks-row,.remarks-row.visible{padding-left:var(--kn-16);}
+  footer{flex-direction:column;gap:var(--kn-8);text-align:center;padding:var(--kn-32) var(--kn-16);}
+  .ft-link{display:none;}
+  .no-print.flex-btns{flex-wrap:wrap;}
+  .back-btn,.btn-print{flex:1;justify-content:center;}
+}
+
+/* ─── RESPONSIVE: MOBILE LANDSCAPE ─── */
+@media(max-height:480px) and (orientation:landscape){
+  .hero{padding:var(--kn-32) var(--kn-48);}
+  .hero h1{font-size:1.4rem;}
+  .hero p{font-size:0.82rem;}
+  .sidebar{position:static;}
+  .maturity-panel{position:static;}
+  .results-hero{padding:var(--kn-32) var(--kn-48);}
+}
+
+/* ─── REDUCED MOTION ─── */
+@media(prefers-reduced-motion:reduce){
+  *,::before,::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important;}
+}
 
 /* ─── SMOOTH THEME TRANSITIONS ─── */
 body,header,footer,.org-section,.dimension,.dimension-header,.progress-card,.result-card,.chart-section,.dim-result-card,.maturity-panel,.gaps-summary,.option-btn,.field-group input,.field-group select,.remarks-input,.back-btn,.btn-reset,.btn-print,.dim-result-header,.maturity-panel-header,.result-header,.gov-banner,.progress-bar-track,.score-bar-track{transition:background 0.28s cubic-bezier(0.4,0,0.2,1),color 0.28s cubic-bezier(0.4,0,0.2,1),border-color 0.28s cubic-bezier(0.4,0,0.2,1),box-shadow 0.2s;}
 
 /* ─── APPLE-GRADE ANIMATIONS ─── */
-@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-@keyframes pop{0%{transform:scale(1)}35%{transform:scale(0.965)}70%{transform:scale(1.018)}100%{transform:scale(1)}}
-@keyframes shimmerIn{from{opacity:0;transform:scale(0.97)}to{opacity:1;transform:scale(1)}}
-.dimension{animation:fadeUp 0.45s cubic-bezier(0.25,0.46,0.45,0.94) both;}
-.dimension:nth-child(1){animation-delay:0s}.dimension:nth-child(2){animation-delay:0.06s}.dimension:nth-child(3){animation-delay:0.12s}.dimension:nth-child(4){animation-delay:0.18s}.dimension:nth-child(5){animation-delay:0.24s}.dimension:nth-child(6){animation-delay:0.30s}
-.option-btn{transition:border-color 0.18s,background 0.18s,transform 0.15s,box-shadow 0.15s;}
-.option-btn:active{transform:scale(0.98);}
-.option-btn.selected{animation:pop 0.28s cubic-bezier(0.34,1.56,0.64,1);}
-.dim-result-card{animation:fadeUp 0.42s cubic-bezier(0.25,0.46,0.45,0.94) both;}
-.dim-result-card:nth-child(1){animation-delay:0.05s}.dim-result-card:nth-child(2){animation-delay:0.1s}.dim-result-card:nth-child(3){animation-delay:0.15s}.dim-result-card:nth-child(4){animation-delay:0.2s}.dim-result-card:nth-child(5){animation-delay:0.25s}.dim-result-card:nth-child(6){animation-delay:0.3s}
-.maturity-panel{animation:shimmerIn 0.35s cubic-bezier(0.25,0.46,0.45,0.94) both;}
-.gaps-summary{animation:fadeUp 0.4s cubic-bezier(0.25,0.46,0.45,0.94) 0.1s both;}
-.chart-section{animation:fadeUp 0.4s cubic-bezier(0.25,0.46,0.45,0.94) 0.05s both;}
-.result-card.visible{animation:shimmerIn 0.3s cubic-bezier(0.25,0.46,0.45,0.94) both;}
-.hero{animation:fadeUp 0.5s cubic-bezier(0.25,0.46,0.45,0.94) both;}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(18px);filter:blur(4px)}
+  to{opacity:1;transform:translateY(0);filter:blur(0)}
+}
+@keyframes fadeUpLight{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes pop{
+  0%{transform:scale(1)}
+  28%{transform:scale(0.955)}
+  62%{transform:scale(1.03)}
+  82%{transform:scale(0.988)}
+  100%{transform:scale(1)}
+}
+@keyframes shimmerIn{
+  from{opacity:0;transform:scale(0.95) translateY(10px);filter:blur(6px)}
+  to{opacity:1;transform:scale(1) translateY(0);filter:blur(0)}
+}
+@keyframes pulseReady{
+  0%,100%{box-shadow:0 0 0 0 rgba(126,155,138,0.5)}
+  50%{box-shadow:0 0 0 7px rgba(126,155,138,0)}
+}
+@keyframes scanLine{
+  0%{opacity:0.4}50%{opacity:1}100%{opacity:0.4}
+}
+
+/* GPU acceleration hints */
+.dimension,.dim-result-card,.maturity-panel,.gaps-summary,.chart-section,.result-card{will-change:transform,opacity;}
+
+/* Entrance animations */
+.hero{animation:fadeUp 0.55s cubic-bezier(0.25,0.46,0.45,0.94) both;}
+.dimension{animation:fadeUpLight 0.44s cubic-bezier(0.25,0.46,0.45,0.94) both;}
+.dimension:nth-child(1){animation-delay:0.04s}.dimension:nth-child(2){animation-delay:0.1s}.dimension:nth-child(3){animation-delay:0.16s}.dimension:nth-child(4){animation-delay:0.22s}.dimension:nth-child(5){animation-delay:0.28s}.dimension:nth-child(6){animation-delay:0.34s}
+.dim-result-card{animation:fadeUpLight 0.42s cubic-bezier(0.25,0.46,0.45,0.94) both;}
+.dim-result-card:nth-child(1){animation-delay:0.06s}.dim-result-card:nth-child(2){animation-delay:0.12s}.dim-result-card:nth-child(3){animation-delay:0.18s}.dim-result-card:nth-child(4){animation-delay:0.24s}.dim-result-card:nth-child(5){animation-delay:0.30s}.dim-result-card:nth-child(6){animation-delay:0.36s}
+.maturity-panel{animation:shimmerIn 0.5s cubic-bezier(0.25,0.46,0.45,0.94) both;}
+.gaps-summary{animation:fadeUpLight 0.42s cubic-bezier(0.25,0.46,0.45,0.94) 0.12s both;}
+.chart-section{animation:fadeUpLight 0.42s cubic-bezier(0.25,0.46,0.45,0.94) 0.06s both;}
+.result-card.visible{animation:shimmerIn 0.38s cubic-bezier(0.25,0.46,0.45,0.94) both;}
+
+/* Option button interactions */
+.option-btn{transition:border-color 0.16s,background 0.16s,transform 0.14s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.16s;}
+.option-btn:hover{box-shadow:0 2px 8px rgba(126,155,138,0.15);}
+.option-btn:active{transform:scale(0.975);}
+.option-btn.selected{animation:pop 0.32s cubic-bezier(0.34,1.56,0.64,1);box-shadow:0 0 0 3px rgba(126,155,138,0.18);}
+
+/* Card hover lift */
+.dimension{transition:box-shadow 0.22s,transform 0.22s cubic-bezier(0.34,1.56,0.64,1);}
+.dimension:not(:has(.dimension-header:active)):hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(28,27,25,0.08);}
+.dim-result-card{transition:box-shadow 0.22s,transform 0.22s cubic-bezier(0.34,1.56,0.64,1);}
+.dim-result-card:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(28,27,25,0.1);}
+[data-theme="dark"] .dimension:hover{box-shadow:0 6px 24px rgba(0,0,0,0.35);}
+[data-theme="dark"] .dim-result-card:hover{box-shadow:0 8px 32px rgba(0,0,0,0.4);}
+
+/* Submit button ready state pulse */
+.btn-submit:not(:disabled){animation:pulseReady 2.4s ease-in-out 2 1s;}
+
+/* Reveal scan line pulse */
+#reveal-scan-line.visible{animation:scanLine 1.2s ease-in-out infinite;}
 
 /* ─── THEME TOGGLE BUTTON ─── */
 .header-actions{display:flex;align-items:center;gap:var(--kn-16);}
