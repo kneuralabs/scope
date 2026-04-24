@@ -16,7 +16,7 @@ function build(){
               <span class="option-key">${k}</span><span class="option-text">${v}</span>
             </button>`).join("")}
         </div>
-        <button class="add-note-trigger" id="note-trigger-${q.num}" style="display:none" onclick="addNote(${q.num})">
+        <button class="add-note-trigger hidden" id="note-trigger-${q.num}" onclick="addNote(${q.num})" aria-label="Add note to this question">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Add note
         </button>
@@ -28,7 +28,7 @@ function build(){
     const el=document.createElement("div");
     el.className="dimension open";
     el.innerHTML=`
-      <div class="dimension-header" onclick="this.closest('.dimension').classList.toggle('open')">
+      <div class="dimension-header" role="button" tabindex="0" aria-expanded="true" onclick="var o=this.closest('.dimension').classList.toggle('open');this.setAttribute('aria-expanded',String(o))" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}">
         <div class="dim-icon">${d.icon}</div>
         <div class="dim-title-block"><div class="dim-title">${d.title}</div><div class="dim-subtitle">${d.subtitle}</div></div>
         <span class="dim-gov-tag">${d.govTag}</span>
@@ -49,7 +49,7 @@ function selectAnswer(q,k,btn){
   btn.closest(".question-row").querySelectorAll(".option-btn").forEach(b=>b.classList.remove("selected"));
   btn.classList.add("selected");
   ans[q]=k;
-  document.getElementById(`note-trigger-${q}`).style.display="inline-flex";
+  document.getElementById(`note-trigger-${q}`).classList.remove("hidden");
   update();
 }
 
@@ -98,7 +98,7 @@ function resetAll(){
   document.querySelectorAll(".option-btn").forEach(b=>b.classList.remove("selected"));
   document.querySelectorAll(".remarks-row").forEach(r=>r.classList.remove("visible"));
   document.querySelectorAll(".remarks-input").forEach(i=>i.value="");
-  document.querySelectorAll("[id^='note-trigger-']").forEach(t=>t.style.display="none");
+  document.querySelectorAll(".add-note-trigger").forEach(t=>t.classList.add("hidden"));
   document.getElementById("live-result-card").classList.remove("visible");
   document.getElementById("submit-btn").disabled=true;
   update();
@@ -107,7 +107,9 @@ function resetAll(){
 function generateResults(){
   const org=document.getElementById("org-name").value||"Your Organisation";
   const ass=document.getElementById("assessor-name").value;
-  localStorage.setItem("knScope",JSON.stringify({ans,rem,org,ass}));
+  const ind=document.getElementById("org-industry").value;
+  const size=document.getElementById("org-size").value;
+  localStorage.setItem("knScope",JSON.stringify({ans,rem,org,ass,ind,size}));
 
   // Show reveal overlay then redirect
   const ov=document.getElementById("reveal-overlay");
