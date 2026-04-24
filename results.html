@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KNEURASCOPE — AI Governance Gap Report</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="header-logo">
+    <svg class="kn-artmark" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="KNEURALABS logo">
+      <circle cx="18" cy="18" r="16" fill="#1C1B19"/>
+      <path d="M18 2 A16 16 0 0 0 18 34 Z" fill="#468DA3"/>
+      <path d="M18 2 A16 16 0 0 1 31.86 26 L18 18 Z" fill="#C5062A"/>
+      <path d="M31.86 26 A16 16 0 0 1 18 34 L18 18 Z" fill="#0A98D9"/>
+    </svg>
+    <div class="header-brand">
+      <span class="wordmark">KNEURALABS</span>
+      <span class="product-name">Kneurascope</span>
+    </div>
+  </div>
+  <span class="header-tagline">Structural AI Governance.</span>
+</header>
+
+<div class="results-hero">
+  <div class="rh-label">AI Governance Gap Report — Complete</div>
+  <h2>AI Governance Report</h2>
+  <div class="org-name-display" id="results-org-display">—</div>
+</div>
+
+<div class="results-layout">
+  <div>
+    <div style="display:flex;gap:10px;margin-bottom:24px" class="no-print">
+      <a href="index.html" class="back-btn">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        Back
+      </a>
+      <button class="btn-print" onclick="window.print()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+        Save / Print PDF
+      </button>
+    </div>
+
+    <div class="maturity-panel">
+      <div class="maturity-panel-header">
+        <div class="mp-label">Overall Governance Score</div>
+        <div class="big-score" id="result-big-score">—<span> / 4.0</span></div>
+      </div>
+
+      <div class="maturity-runway">
+        <div class="runway-track">
+          <div class="runway-fill" id="runway-fill" style="width:0%"></div>
+          <div class="runway-marker" id="runway-marker" style="left:0%"></div>
+        </div>
+        <div class="runway-labels">
+          <span class="runway-label" id="rl-unprepared">Ungoverned</span>
+          <span class="runway-label" id="rl-early">Emerging</span>
+          <span class="runway-label" id="rl-ready">Governed</span>
+          <span class="runway-label" id="rl-mature">Exemplary</span>
+        </div>
+      </div>
+
+      <div class="maturity-scale">
+        <div class="scale-item" id="scale-unprepared"><div class="scale-dot unprepared"></div><div class="scale-text"><div class="scale-name">Ungoverned</div><div class="scale-range">1.0 – 1.9</div></div></div>
+        <div class="scale-item" id="scale-early"><div class="scale-dot early"></div><div class="scale-text"><div class="scale-name">Emerging Governance</div><div class="scale-range">2.0 – 2.6</div></div></div>
+        <div class="scale-item" id="scale-ready"><div class="scale-dot ready"></div><div class="scale-text"><div class="scale-name">Governance Capable</div><div class="scale-range">2.7 – 3.3</div></div></div>
+        <div class="scale-item" id="scale-mature"><div class="scale-dot mature"></div><div class="scale-text"><div class="scale-name">Governance Exemplary</div><div class="scale-range">3.4 – 4.0</div></div></div>
+      </div>
+
+      <div class="maturity-rec">
+        <div class="rec-label">Governance Verdict</div>
+        <p id="result-recommendation">—</p>
+      </div>
+    </div>
+
+    <div class="gaps-summary" id="gaps-summary-panel">
+      <div class="gs-label">Critical Governance Gaps Identified</div>
+      <div id="gaps-list"></div>
+    </div>
+  </div>
+
+  <div class="results-content">
+    <div class="chart-section">
+      <div class="chart-title">Governance Radar — Score by Dimension</div>
+      <div style="max-width:480px;margin:0 auto"><canvas id="results-chart"></canvas></div>
+    </div>
+    <div id="dim-results-container"></div>
+  </div>
+</div>
+
+<footer>
+  <span class="ft-brand">KNEURALABS</span>
+  <span class="ft-copy">© 2026 Kneuralabs LLC · Confidential · Not for distribution</span>
+  <a href="https://www.kneuralabs.com" class="ft-link">www.kneuralabs.com</a>
+</footer>
+
+<script src="data.js"></script>
+<script src="results.js"></script>
+</body>
+</html>
