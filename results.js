@@ -4,12 +4,12 @@ let _chartLabels=[],_chartData=[];
 function getChartColors(){
   const dark=document.documentElement.getAttribute('data-theme')==='dark';
   return{
-    grid:dark?'rgba(255,255,255,0.07)':'rgba(92,90,85,0.12)',
-    labels:dark?'#B8B6AF':'#1C1B19',
-    ticks:dark?'#6A6860':'#5C5A55',
-    pointBorder:dark?'#131311':'#FFFFFF',
-    fill:'rgba(126,155,138,0.1)',
-    border:'#7E9B8A',
+    grid:dark?'rgba(28,92,170,0.15)':'rgba(28,92,170,0.1)',
+    labels:dark?'#DDE5F0':'#1A1D23',
+    ticks:dark?'#4A6080':'#6B7280',
+    pointBorder:dark?'#0A1A30':'#FFFFFF',
+    fill:'rgba(28,92,170,0.08)',
+    border:'#1C5CAA',
   };
 }
 
@@ -21,7 +21,7 @@ function buildChart(lbls,data){
   chart=new Chart(ctx,{
     type:"radar",
     data:{labels:lbls,datasets:[{label:"Governance Score",data,backgroundColor:c.fill,borderColor:c.border,borderWidth:2,
-      pointBackgroundColor:data.map(v=>v<2?"#C0392B":v<3?"#D4860A":"#7E9B8A"),
+      pointBackgroundColor:data.map(v=>v<2?"#C8281E":v<3?"#D4860A":"#1C5CAA"),
       pointBorderColor:c.pointBorder,pointBorderWidth:2,pointRadius:5,pointHoverRadius:7}]},
     options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.r.toFixed(2)} / 4.0`}}},
       scales:{r:{min:0,max:4,ticks:{stepSize:1,font:{family:"'Courier New',monospace",size:10},color:c.ticks,backdropColor:'transparent'},
