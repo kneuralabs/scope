@@ -3,172 +3,195 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>KneuraScope — AI Governance Assessment | Kneuralabs</title>
-<meta name="description" content="Map your organisation's AI governance posture across six structural dimensions. Find every gap — before regulators do.">
-<meta name="theme-color" content="#0D2E5A">
+<title>Scope — AI Readiness Assessment</title>
+<meta name="description" content="Map your organisation's AI governance posture across six structural dimensions.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'" />
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" /></noscript>
-<link rel="stylesheet" href="style.css">
-<link rel="icon" href="favicon.png" type="image/png" sizes="32x32">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Kneuralabs">
-<meta property="og:title" content="KneuraScope — AI Governance Assessment">
-<meta property="og:description" content="Map your organisation's AI governance posture across six structural dimensions. Find every gap — before regulators do.">
-<meta property="og:url" content="https://scope.kneuralabs.com/">
-<meta property="og:image" content="https://scope.kneuralabs.com/og-image.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="KneuraScope — AI Governance Assessment by Kneuralabs">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="KneuraScope — AI Governance Assessment">
-<meta name="twitter:description" content="Map your organisation's AI governance posture across six structural dimensions. Find every gap — before regulators do.">
-<meta name="twitter:image" content="https://scope.kneuralabs.com/og-image.png">
-
-<script>(function(){var h=new Date().getHours();document.documentElement.setAttribute('data-theme',h<8||h>=18?'dark':'light');})();</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400;1,14..32,500&display=swap">
+<link rel="stylesheet" href="styles.css">
+<script>
+(function(){
+  var s = {};
+  try { s = JSON.parse(localStorage.getItem('scopePrefs')||'{}'); } catch(e){}
+  var r = document.documentElement;
+  r.setAttribute('data-theme', s.theme || 'light');
+  r.setAttribute('data-type', s.type || 'helvetica');
+  r.setAttribute('data-density', s.density || 'comfortable');
+  r.setAttribute('data-answer-ui', s.answerUi || 'stack');
+  r.setAttribute('data-form', s.form || 'scroll');
+  r.setAttribute('data-accent', s.accent || 'brick');
+})();
+</script>
 </head>
 <body>
 
-<div id="reveal-overlay" style="position:fixed;inset:0;background:var(--kn-navy);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;opacity:0;pointer-events:none;transition:opacity 0.3s;">
-  <div id="reveal-scan-line" style="font-family:var(--kn-mono);font-size:10px;color:var(--kn-teal);letter-spacing:0.12em;text-transform:uppercase;opacity:0;transition:opacity 0.2s;min-height:16px;">Analysing governance dimensions…</div>
-  <div id="reveal-maturity-tier" style="font-family:var(--kn-mono);font-size:11px;font-weight:600;letter-spacing:0.3em;text-transform:uppercase;color:var(--kn-primary);">—</div>
-  <div id="reveal-score-display" style="font-family:var(--kn-font);font-size:72px;font-weight:700;color:var(--kn-white);letter-spacing:-0.04em;line-height:1;">—<span style="font-size:20px;font-weight:400;color:var(--kn-slate);"> / 4.0</span></div>
-  <div style="width:64px;height:2px;background:var(--kn-primary);"></div>
-  <div style="font-family:var(--kn-mono);font-size:9px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:var(--kn-slate);">AI Governance Score</div>
+<!-- ===== REVEAL OVERLAY ===== -->
+<div class="reveal" id="reveal">
+  <div class="reveal-stack">
+    <div class="reveal-eyebrow"><span class="dot"></span><span id="reveal-status">Compiling governance signal</span></div>
+    <div class="reveal-score" id="reveal-score">0<span class="denom"> / 4.0</span></div>
+    <div class="reveal-tier" id="reveal-tier">&nbsp;</div>
+    <div class="reveal-scan" id="reveal-scan"></div>
+  </div>
 </div>
 
-<header>
-  <div class="header-logo">
-    <img src="logo.png" class="kn-artmark" alt="Kneuralabs logo">
-    <div class="header-brand">
-      <span class="wordmark">KNEURALABS</span>
-      <span class="product-name">KneuraScope</span>
+<div class="shell">
+
+  <!-- ===== TOP BAR ===== -->
+  <div class="topbar no-print">
+    <div class="topbar-left">
+      <a href="index.html" class="topbar-brand"><span class="mark"></span>Scope</a>
+    </div>
+    <div class="topbar-right" id="topbar-right">
+      <span class="topbar-link" style="cursor:default">AI Governance Diagnostic</span>
     </div>
   </div>
-  <div class="header-actions">
-    <span class="header-tagline">Structural AI Governance.</span>
-    <button class="theme-toggle no-print" onclick="(function(){var t=document.documentElement.getAttribute('data-theme');document.documentElement.setAttribute('data-theme',t==='dark'?'light':'dark');})()" aria-label="Toggle dark/light mode">
-      <svg class="sun-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-      <svg class="moon-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-    </button>
-  </div>
-</header>
 
-<div class="hero">
-  <span class="hero-kicker">AI Governance Assessment</span>
-  <h1>Find every gap in your AI governance<br>— <span>before regulators do.</span></h1>
-  <p>This diagnostic maps your organisation's AI governance posture across six structural dimensions: strategy, operations, data, ethics, risk, and culture. Powered by the KneuraLens™ readiness methodology — every question targets a named, specific gap so your report tells you exactly what to fix.</p>
-  <div class="hero-meta">
-    <div class="hero-meta-item"><span class="label">Questions</span><span class="value">20</span></div>
-    <div class="hero-meta-item"><span class="label">Dimensions</span><span class="value">6</span></div>
-    <div class="hero-meta-item"><span class="label">Est. Time</span><span class="value">12–18 min</span></div>
-    <div class="hero-meta-item"><span class="label">Output</span><span class="value">Gap Report</span></div>
-  </div>
-</div>
+  <!-- ===== HERO ===== -->
+  <header class="hero">
+    <div class="hero-kicker">AI Readiness Assessment · v2</div>
+    <h1>Find every gap in your AI governance <em>before regulators do.</em></h1>
+    <div class="hero-sub">
+      <p class="hero-lede">A structured diagnostic across six dimensions of AI governance — strategy, operations, data, ethics, risk, and culture. Every question maps to a specific, named gap, so the report tells you exactly what to fix and in what order.</p>
+      <div class="hero-meta">
+        <div class="hero-meta-cell"><span class="hero-meta-label">Questions</span><span class="hero-meta-value">20</span></div>
+        <div class="hero-meta-cell"><span class="hero-meta-label">Dimensions</span><span class="hero-meta-value">06</span></div>
+        <div class="hero-meta-cell"><span class="hero-meta-label">Time</span><span class="hero-meta-value">12′</span></div>
+        <div class="hero-meta-cell"><span class="hero-meta-label">Output</span><span class="hero-meta-value">Report</span></div>
+      </div>
+    </div>
+    <div class="dim-preview" id="dim-preview"></div>
+  </header>
 
-<div class="layout">
-  <div class="assessment-form">
-    <div class="org-section">
-      <h3>Organisation Details</h3>
-      <div class="org-fields">
-        <div class="field-group">
-          <label for="org-name">Organisation Name</label>
-          <input type="text" id="org-name" placeholder="e.g. Acme Corporation">
-        </div>
-        <div class="field-group">
-          <label for="assessor-name">Assessor Name</label>
-          <input type="text" id="assessor-name" placeholder="e.g. Jane Smith">
-        </div>
-        <div class="field-group">
-          <label for="org-industry">Industry</label>
-          <select id="org-industry">
-            <option value="">Select industry</option>
-            <option>Financial Services</option>
-            <option>Healthcare</option>
-            <option>Technology</option>
-            <option>Manufacturing</option>
-            <option>Retail</option>
-            <option>Education</option>
-            <option>Government</option>
-            <option>Energy &amp; Utilities</option>
-            <option>Transportation &amp; Logistics</option>
-            <option>Professional Services</option>
-            <option>Media &amp; Entertainment</option>
-            <option>Real Estate</option>
-            <option>Agriculture</option>
-            <option>Construction</option>
-            <option>Legal</option>
-            <option>Other</option>
-          </select>
-        </div>
-        <div class="field-group">
-          <label for="org-size">Organisation Size</label>
-          <select id="org-size">
-            <option value="">Select size</option>
-            <option>1–50 employees</option>
-            <option>51–250 employees</option>
-            <option>251–1,000 employees</option>
-            <option>1,001–5,000 employees</option>
-            <option>5,000+ employees</option>
-          </select>
-        </div>
+  <!-- ===== ORG DETAILS ===== -->
+  <section class="org-section">
+    <div class="org-section-head">
+      <div class="section-numeral">00</div>
+      <div>
+        <h2 class="section-title">Organisation</h2>
+        <p class="section-subtitle">Context for your report. Optional, but it makes the export meaningful.</p>
+      </div>
+    </div>
+    <div class="org-fields">
+      <div class="field-group">
+        <label for="org-name">Organisation Name</label>
+        <input type="text" id="org-name" placeholder="Acme Corporation" autocomplete="off">
+      </div>
+      <div class="field-group">
+        <label for="assessor-name">Assessor</label>
+        <input type="text" id="assessor-name" placeholder="Jane Smith" autocomplete="off">
+      </div>
+      <div class="field-group">
+        <label for="org-industry">Industry</label>
+        <select id="org-industry">
+          <option value="">Select industry</option>
+          <option>Financial Services</option>
+          <option>Healthcare</option>
+          <option>Technology</option>
+          <option>Manufacturing</option>
+          <option>Retail</option>
+          <option>Education</option>
+          <option>Government</option>
+          <option>Energy &amp; Utilities</option>
+          <option>Transportation &amp; Logistics</option>
+          <option>Professional Services</option>
+          <option>Media &amp; Entertainment</option>
+          <option>Real Estate</option>
+          <option>Legal</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label for="org-size">Organisation Size</label>
+        <select id="org-size">
+          <option value="">Select size</option>
+          <option>1–50 employees</option>
+          <option>51–250 employees</option>
+          <option>251–1,000 employees</option>
+          <option>1,001–5,000 employees</option>
+          <option>5,000+ employees</option>
+        </select>
       </div>
     </div>
 
     <div class="gov-banner">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      <p><strong>How scoring works:</strong> Each answer is scored 1–4. Only answers A or B signal a structural governance gap — those appear explicitly in your report. Answer D means the control is fully in place. Your final score determines your maturity tier and priority action plan.</p>
+      <div class="gov-banner-label">Scoring</div>
+      <p>Each answer scores 1–4 on a maturity ladder<span class="ladder"><i class="on"></i><i></i><i></i><i></i></span>→<span class="ladder"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span>. Answers <strong>A</strong> and <strong>B</strong> signal a structural gap and surface explicitly in your report. <strong>D</strong> means the control is fully in place. Your average determines your maturity tier and priority actions.</p>
     </div>
+  </section>
 
-    <div id="dimensions-container"></div>
+  <!-- ===== STEPPER NAV (alt layouts) ===== -->
+  <div class="stepper-nav no-print" id="stepper-nav">
+    <div class="stepper-dots" id="stepper-dots"></div>
+    <div class="stepper-controls">
+      <button class="stepper-btn" id="step-prev">← Prev</button>
+      <button class="stepper-btn" id="step-next">Next →</button>
+    </div>
+  </div>
 
-    <div class="submit-row">
-      <button class="btn-reset" onclick="resetAll()">Reset</button>
-      <button class="btn-submit" id="submit-btn" onclick="generateResults()" disabled>Generate Gap Report</button>
+  <!-- ===== DIMENSIONS ===== -->
+  <main id="dimensions-container"></main>
+
+  <!-- one-at-a-time controls -->
+  <div class="one-controls no-print" id="one-controls">
+    <button class="btn ghost" id="one-prev">← Back</button>
+    <button class="btn primary" id="one-next">Next question →</button>
+  </div>
+
+  <!-- ===== SUBMIT ===== -->
+  <div class="submit-row" id="submit-row">
+    <div class="submit-status" id="submit-status"><span class="pulse"></span>0 of 20 answered</div>
+    <div class="btn-row">
+      <button class="btn ghost" onclick="resetAll()">Reset</button>
+      <button class="btn primary" id="submit-btn" onclick="generateResults()" disabled>Generate Gap Report →</button>
     </div>
   </div>
 
-  <div class="sidebar">
-    <div class="progress-card">
-      <div class="progress-header">
-        <div class="label">Progress</div>
-        <div class="count" id="progress-count">0 <span>/ 20 answered</span></div>
-      </div>
-      <div class="progress-bar-wrap">
-        <div class="progress-bar-track"><div class="progress-bar-fill" id="progress-bar"></div></div>
-        <div class="progress-bar-label"><span>Governance coverage</span><span id="progress-pct">0%</span></div>
-      </div>
-      <div class="dim-progress-list" id="dim-progress-list"></div>
-    </div>
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <span class="footer-left">Scope · AI Governance Diagnostic</span>
+    <span class="footer-center">Confidential · Not for distribution</span>
+    <span class="footer-right" id="year">© 2026</span>
+  </footer>
 
-    <div class="result-card" id="live-result-card">
-      <div class="result-header">
-        <div class="label">Live Governance Score</div>
-        <div class="maturity-badge" id="live-maturity-badge">—</div>
-      </div>
-      <div class="scores-grid">
-        <div class="score-item"><span class="slabel">Avg. Score</span><span class="svalue" id="live-avg">—</span></div>
-        <div class="score-item"><span class="slabel">Gaps Detected</span><span class="svalue alert" id="live-gaps">—</span></div>
-      </div>
-      <div class="recommendation">
-        <div class="rec-label">Governance Signal</div>
-        <p id="live-recommendation">Answer questions to reveal your governance gaps.</p>
-      </div>
-    </div>
-  </div>
 </div>
 
-<footer>
-  <span class="ft-brand">KNEURALABS</span>
-  <span class="ft-copy">© 2026 Kneuralabs LLC · Confidential · Not for distribution</span>
-  <a href="https://www.kneuralabs.com" class="ft-link">www.kneuralabs.com</a>
-</footer>
+<!-- ===== LIVE HUD ===== -->
+<aside class="live-hud no-print" id="live-hud">
+  <div class="live-hud-head">
+    <span class="live-hud-label">Live Governance Score</span>
+    <span class="live-hud-pct" id="hud-pct">0%</span>
+  </div>
+  <div class="live-hud-score-row">
+    <span class="live-hud-score" id="hud-score">—</span>
+    <span class="live-hud-score-max">/ 4.0</span>
+  </div>
+  <div class="live-hud-tier" id="hud-tier">Awaiting input</div>
+  <div class="live-hud-dims" id="hud-dims"></div>
+  <div class="live-hud-stats">
+    <div>
+      <div class="live-hud-stat-label">Answered</div>
+      <div class="live-hud-stat-value" id="hud-answered">0 / 20</div>
+    </div>
+    <div>
+      <div class="live-hud-stat-label">Gaps Detected</div>
+      <div class="live-hud-stat-value alert" id="hud-gaps">0</div>
+    </div>
+  </div>
+</aside>
+
+<!-- ===== TWEAKS ===== -->
+<div id="tweaks-root"></div>
 
 <script src="data.js"></script>
 <script src="assessment.js"></script>
+
+<!-- Tweaks (React) -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="tweaks.jsx"></script>
+
 </body>
 </html>
