@@ -8,8 +8,8 @@ const SCOPE_TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "accent": "brick",
   "type": "helvetica",
   "density": "comfortable",
-  "answerUi": "stack",
-  "form": "scroll"
+  "answerUi": "slider",
+  "form": "stepper"
 }/*EDITMODE-END*/;
 
 const ACCENTS = {

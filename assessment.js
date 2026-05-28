@@ -83,14 +83,18 @@ function build() {
   document.getElementById('one-next').addEventListener('click', () => goOne(oneIndex + 1));
 
   restore();
+  syncAnswerUi();
   applyFormMode();
   update();
 }
 
+const LADDER_NAMES = ['None', 'Ad hoc', 'Developing', 'Systematic'];
+
 function questionMarkup(q) {
   const num = q.num;
   const keys = ['A', 'B', 'C', 'D'];
-  // stack / grid markup
+
+  // stack / grid markup (unchanged)
   const opts = keys.map((k, i) => {
     const ladder = [0, 1, 2, 3].map(d =>
       `<i class="${d <= i ? '' : 'off'}"></i>`).join('');
@@ -103,13 +107,16 @@ function questionMarkup(q) {
     </button>`;
   }).join('');
 
-  // slider markup
+  // maturity ladder markup
   const stops = keys.map((k, i) => `
     <div class="slider-stop" data-q="${num}" data-key="${k}">
-      <button data-q="${num}" data-key="${k}">
-        <span class="slider-stop-key">${k} · ${i + 1}/4</span>
-        <span class="slider-stop-dot"></span>
+      <button class="ladder-stop-btn" data-q="${num}" data-key="${k}">
+        <div class="ladder-node">${i + 1}</div>
       </button>
+      <div class="ladder-stop-meta">
+        <span class="ladder-stop-letter">${k}</span>
+        <span class="ladder-stop-name">${LADDER_NAMES[i]}</span>
+      </div>
     </div>`).join('');
 
   return `
@@ -122,10 +129,12 @@ function questionMarkup(q) {
     <p class="q-text">${q.text}</p>
     <div class="opts">${opts}</div>
     <div class="slider-wrap" style="display:none">
-      <div class="slider-rail"></div>
-      <div class="slider-track">${stops}</div>
+      <div class="ladder">
+        <div class="ladder-rail"><div class="ladder-fill" data-fill-q="${num}"></div></div>
+        <div class="ladder-stops">${stops}</div>
+      </div>
       <div class="slider-detail" data-q="${num}">
-        <div class="slider-detail-empty">Select a maturity level to read its definition.</div>
+        <div class="slider-detail-empty">Select a maturity level to see its definition.</div>
       </div>
     </div>
     <button class="note-trigger" data-q="${num}">Add note</button>
@@ -140,16 +149,22 @@ function selectAnswer(num, key) {
   document.querySelectorAll(`.opt-btn[data-q="${num}"]`).forEach(b => {
     b.classList.toggle('selected', b.dataset.key === key);
   });
-  // slider stops
+  // ladder stops
   document.querySelectorAll(`.slider-stop[data-q="${num}"]`).forEach(s => {
     s.classList.toggle('selected', s.dataset.key === key);
   });
-  // slider detail
+  // ladder fill bar
+  const fill = document.querySelector(`.ladder-fill[data-fill-q="${num}"]`);
+  if (fill) {
+    const idx = ['A', 'B', 'C', 'D'].indexOf(key);
+    fill.style.width = (idx / 3 * 100) + '%';
+  }
+  // ladder detail
   const detail = document.querySelector(`.slider-detail[data-q="${num}"]`);
   if (detail) {
     const q = FLAT_Q.find(f => f.q.num === num).q;
     const idx = ['A', 'B', 'C', 'D'].indexOf(key);
-    detail.innerHTML = `<div class="slider-detail-key">${key} · Level ${idx + 1} of 4</div><div class="slider-detail-text">${q.opt[key]}</div>`;
+    detail.innerHTML = `<div class="slider-detail-key">${LADDER_NAMES[idx]} · Level ${idx + 1} of 4</div><div class="slider-detail-text">${q.opt[key]}</div>`;
   }
   persist();
   update();
@@ -285,11 +300,13 @@ function restore() {
     ans[n] = k;
     document.querySelectorAll(`.opt-btn[data-q="${n}"]`).forEach(b => b.classList.toggle('selected', b.dataset.key === k));
     document.querySelectorAll(`.slider-stop[data-q="${n}"]`).forEach(s => s.classList.toggle('selected', s.dataset.key === k));
+    const idx = ['A', 'B', 'C', 'D'].indexOf(k);
+    const fill = document.querySelector(`.ladder-fill[data-fill-q="${n}"]`);
+    if (fill) fill.style.width = (idx / 3 * 100) + '%';
     const detail = document.querySelector(`.slider-detail[data-q="${n}"]`);
     if (detail) {
       const q = FLAT_Q.find(f => f.q.num == n).q;
-      const idx = ['A', 'B', 'C', 'D'].indexOf(k);
-      detail.innerHTML = `<div class="slider-detail-key">${k} · Level ${idx + 1} of 4</div><div class="slider-detail-text">${q.opt[k]}</div>`;
+      detail.innerHTML = `<div class="slider-detail-key">${LADDER_NAMES[idx]} · Level ${idx + 1} of 4</div><div class="slider-detail-text">${q.opt[k]}</div>`;
     }
   });
   if (raw.rem) Object.entries(raw.rem).forEach(([n, t]) => {
