@@ -1,133 +1,220 @@
-let chart=null;
-let _chartLabels=[],_chartData=[];
+/* ============================================================
+   Scope — Results logic
+   ============================================================ */
 
-function getChartColors(){
-  const dark=document.documentElement.getAttribute('data-theme')==='dark';
-  return{
-    grid:dark?'rgba(28,92,170,0.15)':'rgba(28,92,170,0.1)',
-    labels:dark?'#DDE5F0':'#1A1D23',
-    ticks:dark?'#4A6080':'#6B7280',
-    pointBorder:dark?'#0A1A30':'#FFFFFF',
-    fill:'rgba(28,92,170,0.08)',
-    border:'#1C5CAA',
-  };
+let chart = null;
+
+function accentVar() {
+  return getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#8a2a1f';
+}
+function cssVar(name) {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 }
 
-function buildChart(lbls,data){
-  if(chart)chart.destroy();
-  _chartLabels=lbls;_chartData=data;
-  const c=getChartColors();
-  const ctx=document.getElementById("results-chart").getContext("2d");
-  chart=new Chart(ctx,{
-    type:"radar",
-    data:{labels:lbls,datasets:[{label:"Governance Score",data,backgroundColor:c.fill,borderColor:c.border,borderWidth:2,
-      pointBackgroundColor:data.map(v=>v<2?"#C8281E":v<3?"#D4860A":"#1C5CAA"),
-      pointBorderColor:c.pointBorder,pointBorderWidth:2,pointRadius:5,pointHoverRadius:7}]},
-    options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.r.toFixed(2)} / 4.0`}}},
-      scales:{r:{min:0,max:4,ticks:{stepSize:1,font:{family:"'Courier New',monospace",size:10},color:c.ticks,backdropColor:'transparent'},
-        grid:{color:c.grid},angleLines:{color:c.grid},
-        pointLabels:{font:{family:"'Inter',sans-serif",size:11,weight:"600"},color:c.labels}}}}
-  });
-}
-
-function updateChartTheme(){
-  if(_chartLabels.length)buildChart(_chartLabels,_chartData);
-}
-
-function init(){
-  const raw=localStorage.getItem("knScope");
-  if(!raw){window.location.href="index.html";return;}
+function init() {
   let parsed;
-  try{parsed=JSON.parse(raw);}catch(e){window.location.href="index.html";return;}
-  const {ans,rem,org,ass,ind,size}=parsed;
-  if(!ans||!Object.keys(ans).length){window.location.href="index.html";return;}
-
-  const vals=Object.values(ans).map(v=>SM[v]);
-  const avg=vals.reduce((x,y)=>x+y,0)/vals.length;
-  const m=getM(avg);
-  const dateStr=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
-
-  const meta=[org||"Your Organisation",ind,size,ass?`Assessed by ${ass}`:"",dateStr].filter(Boolean).join(' · ');
-  document.getElementById("results-org-display").textContent=meta;
-  document.getElementById("result-recommendation").textContent=m.rec;
-
-  // Animated count-up for big score
-  const scoreEl=document.getElementById("result-big-score");
-  const start=performance.now(),dur=900;
-  function countUp(now){
-    const p=Math.min((now-start)/dur,1);
-    const ease=1-Math.pow(1-p,3);
-    scoreEl.innerHTML=`${(ease*avg).toFixed(2)}<span> / 4.0</span>`;
-    if(p<1)requestAnimationFrame(countUp);
+  try { parsed = JSON.parse(localStorage.getItem('scope') || 'null'); } catch (e) { parsed = null; }
+  if (!parsed || !parsed.ans || !Object.keys(parsed.ans).length) {
+    window.location.href = 'index.html';
+    return;
   }
-  requestAnimationFrame(countUp);
+  const { ans, rem = {}, org, ass, ind, size } = parsed;
 
-  // Runway animation
-  setTimeout(()=>{
-    const p=Math.max(0,Math.min(100,((avg-1)/3)*100));
-    document.getElementById("runway-fill").style.width=p+"%";
-    document.getElementById("runway-marker").style.left=p+"%";
-  },300);
+  const vals = Object.values(ans).map(v => SM[v]);
+  const avg = vals.reduce((a, b) => a + b, 0) / vals.length;
+  const m = getM(avg);
 
-  // Maturity scale highlight
-  ["unprepared","early","ready","mature"].forEach(id=>{
-    document.getElementById(`rl-${id}`)?.classList.remove("active");
-    document.getElementById(`scale-${id}`).classList.remove("current");
-  });
-  document.getElementById(`rl-${m.id}`)?.classList.add("active");
-  document.getElementById(`scale-${m.id}`).classList.add("current");
+  // header
+  document.getElementById('report-org').textContent = org || 'Your Organisation';
+  const dateStr = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+  const meta = [ind, size, ass ? 'Assessed by ' + ass : '', dateStr].filter(Boolean);
+  document.getElementById('report-meta').innerHTML = meta.join('&nbsp;&nbsp;·&nbsp;&nbsp;');
+  document.getElementById('report-date').textContent = dateStr;
+  document.getElementById('big-tier').textContent = m.label;
+  document.getElementById('signal-rec').textContent = m.rec;
 
-  // Gaps list
-  const gaps=[];
-  DIMS.forEach(d=>d.q.forEach(q=>{
-    if(ans[q.num]==='A'||ans[q.num]==='B')
-      gaps.push({dim:d.title,signal:q.signal,gap:q.gap,severity:ans[q.num]==='A'?'Critical':'Significant'});
-  }));
-  const gapsList=document.getElementById("gaps-list");
-  if(!gaps.length){
-    gapsList.innerHTML='<div class="gap-item" style="color:var(--kn-emerald);font-weight:500">No critical or significant gaps detected. Your governance posture is strong across all dimensions.</div>';
-  }else{
-    gaps.forEach(g=>{
-      const item=document.createElement("div");
-      item.className="gap-item";
-      item.innerHTML=`<span class="gap-badge ${g.severity.toLowerCase()}">${g.severity}</span><div><div style="font-weight:600;margin-bottom:2px">${g.gap}</div><div style="color:var(--kn-slate);font-size:10px;font-family:var(--kn-mono);letter-spacing:0.04em">${g.dim} · ${g.signal}</div></div>`;
-      gapsList.appendChild(item);
-    });
-  }
+  // count up big score
+  const bs = document.getElementById('big-score');
+  const start = performance.now(), dur = 1000;
+  (function up(now) {
+    const p = Math.min((now - start) / dur, 1);
+    const e = 1 - Math.pow(1 - p, 3);
+    bs.innerHTML = (e * avg).toFixed(2) + '<span class="denom"> / 4.0</span>';
+    if (p < 1) requestAnimationFrame(up);
+  })(start);
 
-  // Dimension result cards + chart data
-  const cont=document.getElementById("dim-results-container");
-  const lbls=[],data=[];
-  DIMS.forEach(d=>{
-    const ds=d.q.map(q=>ans[q.num]?SM[ans[q.num]]:0);
-    const da=ds.reduce((x,y)=>x+y,0)/ds.length;
-    lbls.push(d.govTag);
+  // maturity ladder
+  const stops = document.getElementById('ladder-stops');
+  stops.innerHTML = MAT.map(t => `
+    <div class="ladder-stop ${t.id === m.id ? 'current' : ''}" data-id="${t.id}">
+      <div class="ladder-stop-range">${t.min.toFixed(1)}–${t.max.toFixed(1)}</div>
+      <div class="ladder-stop-label">${t.label}</div>
+    </div>`).join('');
+  const pos = Math.max(0, Math.min(100, ((avg - 1) / 3) * 100));
+  setTimeout(() => {
+    document.getElementById('ladder-fill').style.width = pos + '%';
+    document.getElementById('ladder-marker').style.left = pos + '%';
+    document.getElementById('ladder-marker-val').textContent = avg.toFixed(2);
+  }, 250);
+
+  // dimension scores
+  const lbls = [], data = [], dimScores = [];
+  DIMS.forEach(d => {
+    const ds = d.q.map(q => ans[q.num] ? SM[ans[q.num]] : 0);
+    const da = ds.reduce((a, b) => a + b, 0) / ds.length;
+    lbls.push(d.govTag.replace(' Governance', ''));
     data.push(+da.toFixed(2));
-    const sc=da<2?"low":da<3?"mid":"high";
-    const qs=d.q.map(q=>{
-      const isA=ans[q.num]==='A',isB=ans[q.num]==='B';
-      const gt=isA?`<div class="dqr-gap critical">Critical Gap: ${q.gap}</div>`:
-               isB?`<div class="dqr-gap significant">Governance Gap: ${q.gap}</div>`:"";
-      return `<div class="dim-q-result">
-        <span class="dqr-num">Q${q.num}</span>
-        <div style="flex:1"><div class="dqr-text">${q.text}</div>${gt}${rem[q.num]?`<div class="dqr-remark">${rem[q.num]}</div>`:""}</div>
-        <span class="dqr-answer">${ans[q.num]||"—"} · ${ans[q.num]?SM[ans[q.num]]:0}/4</span>
-      </div>`;
-    }).join("");
-    const card=document.createElement("div");
-    card.className="dim-result-card";
-    card.innerHTML=`
-      <div class="dim-result-header">
-        <div class="dim-icon">${d.icon}</div>
-        <div class="dim-result-title">${d.title}</div>
-        <div class="dim-result-score ${sc}">${da.toFixed(2)}<span> / 4.0</span></div>
-      </div>
-      <div class="score-bar-track"><div class="score-bar-fill" style="width:${((da-1)/3)*100}%"></div></div>
-      <div class="dim-result-body">${qs}</div>`;
-    cont.appendChild(card);
+    dimScores.push({ d, da });
   });
 
-  buildChart(lbls,data);
+  // bars
+  const barsList = document.getElementById('bars-list');
+  barsList.innerHTML = dimScores.map(({ d, da }) => {
+    const cls = da < 2 ? 'low' : da < 3 ? 'mid' : '';
+    const w = ((da - 1) / 3) * 100;
+    return `
+    <div class="bar-row">
+      <div class="bar-num ${cls === 'low' ? 'low' : ''}">${da.toFixed(2)}</div>
+      <div class="bar-track-wrap">
+        <div class="bar-label" style="margin-bottom:2px">
+          <span class="bar-name">${d.title}</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill ${cls}" data-w="${w}"></div></div>
+      </div>
+      <div class="bar-tag">${d.govTag}</div>
+    </div>`;
+  }).join('');
+  setTimeout(() => {
+    document.querySelectorAll('.bar-fill').forEach(f => { f.style.width = f.dataset.w + '%'; });
+  }, 350);
+
+  // stats
+  const gapsArr = [];
+  DIMS.forEach(d => d.q.forEach(q => {
+    if (ans[q.num] === 'A' || ans[q.num] === 'B') {
+      gapsArr.push({ dim: d.title, signal: q.signal, gap: q.gap, sev: ans[q.num] === 'A' ? 'critical' : 'significant' });
+    }
+  }));
+  const critical = gapsArr.filter(g => g.sev === 'critical').length;
+  const strong = Object.values(ans).filter(v => v === 'D').length;
+  document.getElementById('stat-gaps').textContent = gapsArr.length;
+  document.getElementById('stat-critical').textContent = critical;
+  document.getElementById('stat-strong').textContent = strong;
+
+  // gaps list (critical first)
+  gapsArr.sort((a, b) => (a.sev === b.sev ? 0 : a.sev === 'critical' ? -1 : 1));
+  const gapsList = document.getElementById('gaps-list');
+  const gapsIntro = document.getElementById('gaps-intro');
+  if (!gapsArr.length) {
+    gapsIntro.textContent = '';
+    gapsList.innerHTML = '<div class="gaps-none">No critical or significant gaps detected. Your governance posture is strong across all six dimensions — focus now on sustaining and auditing.</div>';
+  } else {
+    gapsIntro.textContent = `${gapsArr.length} structural gap${gapsArr.length > 1 ? 's' : ''} surfaced from answers marked A or B. Ordered by severity — address critical items first.`;
+    gapsList.innerHTML = gapsArr.map((g, i) => `
+      <div class="gap-item">
+        <div class="gap-index">${String(i + 1).padStart(2, '0')}</div>
+        <div class="gap-severity ${g.sev}"><span class="sev-dot"></span>${g.sev === 'critical' ? 'Critical' : 'Significant'}</div>
+        <div class="gap-body">
+          <div class="gap-text">${g.gap}</div>
+          <div class="gap-src">${g.dim} · ${g.signal}</div>
+        </div>
+      </div>`).join('');
+  }
+
+  // breakdown
+  const bd = document.getElementById('breakdown');
+  bd.innerHTML = dimScores.map(({ d, da }, di) => {
+    const low = da < 2;
+    const qs = d.q.map(q => {
+      const a = ans[q.num];
+      const isA = a === 'A', isB = a === 'B';
+      const gap = isA ? `<div class="bd-q-gap">Critical gap — ${q.gap}</div>`
+        : isB ? `<div class="bd-q-gap significant">Governance gap — ${q.gap}</div>` : '';
+      const remk = rem[q.num] ? `<div class="bd-q-remark">“${rem[q.num]}”</div>` : '';
+      const ansLow = (a === 'A' || a === 'B') ? 'low' : '';
+      return `
+      <div class="bd-q">
+        <span class="bd-q-num">Q${String(q.num).padStart(2, '0')}</span>
+        <div>
+          <div class="bd-q-text">${q.text}</div>
+          ${gap}${remk}
+        </div>
+        <span class="bd-q-answer ${ansLow}">${a ? SM[a] : 0}/4<span class="key">${a || '—'}</span></span>
+      </div>`;
+    }).join('');
+    return `
+    <div class="bd-dim">
+      <div class="bd-dim-head">
+        <div class="section-numeral">${String(di + 1).padStart(2, '0')}</div>
+        <h3 class="bd-dim-title">${d.title}</h3>
+        <div class="bd-dim-score ${low ? 'low' : ''}">${da.toFixed(2)} / 4.0</div>
+      </div>
+      ${qs}
+    </div>`;
+  }).join('');
+
+  buildChart(lbls, data);
+}
+
+function buildChart(lbls, data) {
+  const ctx = document.getElementById('radar').getContext('2d');
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const ink = cssVar('--ink') || '#15161a';
+  const dimc = cssVar('--dim') || '#6c6c74';
+  const hair = dark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.1)';
+  const accent = accentVar();
+  const paper = cssVar('--paper') || '#f6f3ec';
+
+  // hex to rgba fill
+  function toRGBA(hex, a) {
+    const h = hex.replace('#', '');
+    const r = parseInt(h.substring(0, 2), 16), g = parseInt(h.substring(2, 4), 16), b = parseInt(h.substring(4, 6), 16);
+    return `rgba(${r},${g},${b},${a})`;
+  }
+
+  if (chart) chart.destroy();
+  chart = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: lbls,
+      datasets: [{
+        label: 'Governance Score',
+        data,
+        backgroundColor: toRGBA(accent, 0.1),
+        borderColor: accent,
+        borderWidth: 1.5,
+        pointBackgroundColor: data.map(v => v < 2 ? accent : ink),
+        pointBorderColor: paper,
+        pointBorderWidth: 2,
+        pointRadius: 4,
+        pointHoverRadius: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: c => ' ' + c.parsed.r.toFixed(2) + ' / 4.0' } }
+      },
+      scales: {
+        r: {
+          min: 0, max: 4,
+          ticks: {
+            stepSize: 1, display: true,
+            font: { family: "'Inter', system-ui, sans-serif", size: 9 },
+            color: dimc, backdropColor: 'transparent'
+          },
+          grid: { color: hair },
+          angleLines: { color: hair },
+          pointLabels: {
+            font: { family: "'Inter', system-ui, sans-serif", size: 10, weight: '500' },
+            color: ink
+          }
+        }
+      }
+    }
+  });
 }
 
 init();

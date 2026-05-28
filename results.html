@@ -3,124 +3,129 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>KneuraScope — AI Governance Gap Report | Kneuralabs</title>
-<meta name="description" content="Your AI governance gap report across six structural dimensions — strategy, operations, data, ethics, risk, and culture.">
-<meta name="theme-color" content="#0D2E5A">
+<title>Scope — Gap Report</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<link rel="stylesheet" href="style.css">
-<link rel="icon" href="favicon.png" type="image/png" sizes="32x32">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Kneuralabs">
-<meta property="og:title" content="KneuraScope — AI Governance Gap Report">
-<meta property="og:description" content="Your AI governance gap report across six structural dimensions — strategy, operations, data, ethics, risk, and culture.">
-<meta property="og:url" content="https://scope.kneuralabs.com/results.html">
-<meta property="og:image" content="https://scope.kneuralabs.com/og-image.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="KneuraScope — AI Governance Assessment by Kneuralabs">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="KneuraScope — AI Governance Gap Report">
-<meta name="twitter:description" content="Your AI governance gap report across six structural dimensions — strategy, operations, data, ethics, risk, and culture.">
-<meta name="twitter:image" content="https://scope.kneuralabs.com/og-image.png">
-
-<script>(function(){var h=new Date().getHours();document.documentElement.setAttribute('data-theme',h<8||h>=18?'dark':'light');})();</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400;1,14..32,500&display=swap">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="results.css">
+<script>
+(function(){
+  var s = {};
+  try { s = JSON.parse(localStorage.getItem('scopePrefs')||'{}'); } catch(e){}
+  var r = document.documentElement;
+  r.setAttribute('data-theme', s.theme || 'light');
+  r.setAttribute('data-type', s.type || 'helvetica');
+  r.setAttribute('data-density', s.density || 'comfortable');
+  var ac={brick:'#8a2a1f',ink:'#15161a',forest:'#234f33',cobalt:'#1f3aa8',ochre:'#9a6b12'};
+  var a = ac[s.accent]||ac.brick;
+  if((s.theme||'light')==='dark'){var d={ink:'#efeee8',brick:'#d6584a',forest:'#5fae73',cobalt:'#6f8cff',ochre:'#d6a23c'};a=d[s.accent]||a;}
+  r.style.setProperty('--accent', a);
+})();
+</script>
 </head>
-<body>
+<body class="results-body">
 
-<header>
-  <div class="header-logo">
-    <img src="logo.png" class="kn-artmark" alt="Kneuralabs logo">
-    <div class="header-brand">
-      <span class="wordmark">KNEURALABS</span>
-      <span class="product-name">KneuraScope</span>
+<div class="shell">
+
+  <!-- TOP BAR -->
+  <div class="topbar no-print">
+    <div class="topbar-left">
+      <a href="index.html" class="topbar-brand"><span class="mark"></span>Scope</a>
+    </div>
+    <div class="topbar-right">
+      <a href="index.html" class="topbar-link">← Edit answers</a>
+      <button class="topbar-link" onclick="window.print()" style="border:0;background:none">Print / PDF</button>
     </div>
   </div>
-  <div class="header-actions">
-    <span class="header-tagline">Structural AI Governance.</span>
-    <button class="theme-toggle no-print" onclick="(function(){var t=document.documentElement.getAttribute('data-theme');document.documentElement.setAttribute('data-theme',t==='dark'?'light':'dark');if(typeof updateChartTheme==='function')updateChartTheme();})()" aria-label="Toggle dark/light mode">
-      <svg class="sun-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-      <svg class="moon-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-    </button>
-  </div>
-</header>
 
-<div class="results-hero">
-  <div class="rh-label">AI Governance Gap Report — Complete</div>
-  <h2>AI Governance Report</h2>
-  <div class="org-name-display" id="results-org-display">—</div>
+  <!-- REPORT HEADER -->
+  <header class="report-head">
+    <div class="report-kicker">AI Governance Gap Report</div>
+    <div class="report-head-grid">
+      <div class="report-head-main">
+        <h1 id="report-org">Your Organisation</h1>
+        <div class="report-meta" id="report-meta"></div>
+      </div>
+      <div class="report-head-score">
+        <div class="big-score" id="big-score">0.00<span class="denom"> / 4.0</span></div>
+        <div class="big-tier" id="big-tier">—</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MATURITY LADDER -->
+  <section class="ladder-section">
+    <div class="ladder-rail">
+      <div class="ladder-fill" id="ladder-fill"></div>
+      <div class="ladder-marker" id="ladder-marker"><span id="ladder-marker-val">0.00</span></div>
+    </div>
+    <div class="ladder-stops" id="ladder-stops"></div>
+  </section>
+
+  <!-- TWO-UP: radar + signal -->
+  <section class="overview-grid">
+    <div class="radar-card">
+      <div class="card-label">Dimension Profile</div>
+      <canvas id="radar" width="460" height="460"></canvas>
+    </div>
+    <div class="signal-card">
+      <div class="card-label">Governance Signal</div>
+      <p class="signal-rec" id="signal-rec">—</p>
+      <div class="signal-stats">
+        <div class="signal-stat">
+          <span class="signal-stat-val" id="stat-gaps">0</span>
+          <span class="signal-stat-label">Gaps Detected</span>
+        </div>
+        <div class="signal-stat">
+          <span class="signal-stat-val" id="stat-critical">0</span>
+          <span class="signal-stat-label">Critical (A)</span>
+        </div>
+        <div class="signal-stat">
+          <span class="signal-stat-val" id="stat-strong">0</span>
+          <span class="signal-stat-label">Fully in place (D)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIMENSION BARS -->
+  <section class="bars-section">
+    <div class="section-head-row">
+      <div class="section-numeral">01</div>
+      <h2 class="section-title">Scores by dimension</h2>
+    </div>
+    <div class="bars-list" id="bars-list"></div>
+  </section>
+
+  <!-- PRIORITY GAPS -->
+  <section class="gaps-section">
+    <div class="section-head-row">
+      <div class="section-numeral">02</div>
+      <h2 class="section-title">Priority gaps</h2>
+    </div>
+    <p class="gaps-intro" id="gaps-intro"></p>
+    <div class="gaps-list" id="gaps-list"></div>
+  </section>
+
+  <!-- FULL BREAKDOWN -->
+  <section class="breakdown-section">
+    <div class="section-head-row">
+      <div class="section-numeral">03</div>
+      <h2 class="section-title">Full breakdown</h2>
+    </div>
+    <div id="breakdown"></div>
+  </section>
+
+  <footer class="footer">
+    <span class="footer-left">Scope · AI Governance Diagnostic</span>
+    <span class="footer-center" id="report-date">—</span>
+    <span class="footer-right">Confidential</span>
+  </footer>
+
 </div>
 
-<div class="results-layout">
-  <div>
-    <div style="display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;" class="no-print flex-btns">
-      <a href="index.html" class="back-btn">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
-        Back
-      </a>
-      <button class="btn-print" onclick="window.print()">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-        Save as PDF
-      </button>
-    </div>
-
-    <div class="maturity-panel">
-      <div class="maturity-panel-header">
-        <div class="mp-label">Overall Governance Score</div>
-        <div class="big-score" id="result-big-score">—<span> / 4.0</span></div>
-      </div>
-
-      <div class="maturity-runway">
-        <div class="runway-track">
-          <div class="runway-fill" id="runway-fill" style="width:0%"></div>
-          <div class="runway-marker" id="runway-marker" style="left:0%"></div>
-        </div>
-        <div class="runway-labels">
-          <span class="runway-label" id="rl-unprepared">Ungoverned</span>
-          <span class="runway-label" id="rl-early">Emerging</span>
-          <span class="runway-label" id="rl-ready">Governed</span>
-          <span class="runway-label" id="rl-mature">Exemplary</span>
-        </div>
-      </div>
-
-      <div class="maturity-scale">
-        <div class="scale-item" id="scale-unprepared"><div class="scale-dot unprepared"></div><div class="scale-text"><div class="scale-name">Ungoverned</div><div class="scale-range">1.0 – 1.9</div></div></div>
-        <div class="scale-item" id="scale-early"><div class="scale-dot early"></div><div class="scale-text"><div class="scale-name">Emerging Governance</div><div class="scale-range">2.0 – 2.6</div></div></div>
-        <div class="scale-item" id="scale-ready"><div class="scale-dot ready"></div><div class="scale-text"><div class="scale-name">Governance Capable</div><div class="scale-range">2.7 – 3.3</div></div></div>
-        <div class="scale-item" id="scale-mature"><div class="scale-dot mature"></div><div class="scale-text"><div class="scale-name">Governance Exemplary</div><div class="scale-range">3.4 – 4.0</div></div></div>
-      </div>
-
-      <div class="maturity-rec">
-        <div class="rec-label">Governance Verdict</div>
-        <p id="result-recommendation">—</p>
-      </div>
-    </div>
-
-    <div class="gaps-summary" id="gaps-summary-panel">
-      <div class="gs-label">Critical Governance Gaps Identified</div>
-      <div id="gaps-list"></div>
-    </div>
-  </div>
-
-  <div class="results-content">
-    <div class="chart-section">
-      <div class="chart-title">Governance Radar — Score by Dimension</div>
-      <div style="max-width:480px;margin:0 auto"><canvas id="results-chart"></canvas></div>
-    </div>
-    <div id="dim-results-container"></div>
-  </div>
-</div>
-
-<footer>
-  <span class="ft-brand">KNEURALABS</span>
-  <span class="ft-copy">© 2026 Kneuralabs LLC · Confidential · Not for distribution</span>
-  <a href="https://www.kneuralabs.com" class="ft-link">www.kneuralabs.com</a>
-</footer>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script src="data.js"></script>
 <script src="results.js"></script>
 </body>
