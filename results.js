@@ -14,7 +14,9 @@ function cssVar(name) {
 function init() {
   let parsed;
   try { parsed = JSON.parse(localStorage.getItem('scope') || 'null'); } catch (e) { parsed = null; }
-  if (!parsed || !parsed.ans || !Object.keys(parsed.ans).length) {
+  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed) ||
+      !parsed.ans || typeof parsed.ans !== 'object' || Array.isArray(parsed.ans) ||
+      !Object.keys(parsed.ans).length) {
     window.location.href = 'index.html';
     return;
   }
