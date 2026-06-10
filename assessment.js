@@ -292,6 +292,10 @@ function val(id) { const e = document.getElementById(id); return e ? e.value : '
 function restore() {
   let raw;
   try { raw = JSON.parse(localStorage.getItem('scope') || '{}'); } catch (e) { raw = {}; }
+  // shape validation: corrupt/unexpected state falls back to empty
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) raw = {};
+  if (raw.ans && (typeof raw.ans !== 'object' || Array.isArray(raw.ans))) raw.ans = null;
+  if (raw.rem && (typeof raw.rem !== 'object' || Array.isArray(raw.rem))) raw.rem = null;
   if (raw.org) setVal('org-name', raw.org);
   if (raw.ass) setVal('assessor-name', raw.ass);
   if (raw.ind) setVal('org-industry', raw.ind);
